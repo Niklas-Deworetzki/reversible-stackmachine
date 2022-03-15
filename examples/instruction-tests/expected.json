@@ -1,0 +1,594 @@
+[
+  {
+    "file": "halt1.rsc",
+    "result": []
+  },
+  {
+    "file": "nop1.rsc",
+    "result": []
+  },
+  {
+    "file": "pushc1.rsc",
+    "result": [
+      1
+    ]
+  },
+  {
+    "file": "pushc2.rsc",
+    "result": [
+      -1
+    ]
+  },
+  {
+    "file": "pushc3.rsc",
+    "result": [
+      -2147450881
+    ]
+  },
+  {
+    "file": "pushc4.rsc",
+    "result": [
+      -1
+    ]
+  },
+  {
+    "file": "pushc5.rsc",
+    "result": [
+      32767
+    ]
+  },
+  {
+    "file": "pushc6.rsc",
+    "result": [
+      32767
+    ]
+  },
+  {
+    "file": "pushc7.rsc",
+    "result": [
+      32767
+    ]
+  },
+  {
+    "file": "pushc8.rsc",
+    "result": [
+      2147483647
+    ]
+  },
+  {
+    "file": "pushc9.rsc",
+    "result": [
+      32767
+    ]
+  },
+  {
+    "file": "popc1.rsc",
+    "result": []
+  },
+  {
+    "file": "popc2.rsc",
+    "result": []
+  },
+  {
+    "file": "popc3.rsc",
+    "result": []
+  },
+  {
+    "file": "dup1.rsc",
+    "result": [
+      32767,
+      32767
+    ]
+  },
+  {
+    "file": "dup2.rsc",
+    "result": [
+      -2147450881,
+      -2147450881
+    ]
+  },
+  {
+    "file": "undup1.rsc",
+    "result": [
+      1
+    ]
+  },
+  {
+    "file": "undup2.rsc",
+    "result": [
+      1
+    ]
+  },
+  {
+    "file": "undup2.rsc",
+    "result": [
+      1
+    ]
+  },
+  {
+    "file": "swap1.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "swap2.rsc",
+    "result": [
+      1,
+      2
+    ]
+  },
+  {
+    "file": "swap3.rsc",
+    "result": [
+      2,
+      1
+    ]
+  },
+  {
+    "file": "dig1.rsc",
+    "result": [
+      1
+    ]
+  },
+  {
+    "file": "dig2.rsc",
+    "result": [
+      2,
+      1,
+      1
+    ]
+  },
+  {
+    "file": "bury1.rsc",
+    "result": []
+  },
+  {
+    "file": "bury2.rsc",
+    "result": [
+      1,
+      1,
+      2
+    ]
+  },
+  {
+    "file": "allocpar1.rsc",
+    "result": []
+  },
+  {
+    "file": "allocpar2.rsc",
+    "result": [
+      0,
+      0
+    ]
+  },
+  {
+    "file": "allocpar3.rsc",
+    "result": []
+  },
+  {
+    "file": "releasepar1.rsc",
+    "result": []
+  },
+  {
+    "file": "releasepar2.rsc",
+    "result": []
+  },
+  {
+    "file": "releasepar3.rsc",
+    "result": []
+  },
+  {
+    "file": "frames1.rsc",
+    "result": []
+  },
+  {
+    "file": "frames2.rsc",
+    "result": []
+  },
+  {
+    "file": "pushl1.rsc",
+    "result": []
+  },
+  {
+    "file": "popl1.rsc",
+    "result": []
+  },
+  {
+    "file": "call1.rsc",
+    "result": [
+      8
+    ]
+  },
+  {
+    "file": "call2.rsc",
+    "result": [
+      8
+    ]
+  },
+  {
+    "file": "call3.rsc",
+    "result": []
+  },
+  {
+    "file": "uncall1.rsc",
+    "result": []
+  },
+  {
+    "file": "uncall2.rsc",
+    "result": []
+  },
+  {
+    "file": "branch1.rsc",
+    "result": []
+  },
+  {
+    "file": "cmp1.rsc",
+    "result": [
+      0,
+      1
+    ]
+  },
+  {
+    "file": "cmp2.rsc",
+    "result": [
+      0,
+      1
+    ]
+  },
+  {
+    "file": "cmp3.rsc",
+    "result": [
+      0,
+      1
+    ]
+  },
+  {
+    "file": "cmp4.rsc",
+    "result": [
+      0,
+      1
+    ]
+  },
+  {
+    "file": "cmp5.rsc",
+    "result": [
+      1,
+      0
+    ]
+  },
+  {
+    "file": "cmp6.rsc",
+    "result": [
+      1,
+      0
+    ]
+  },
+  {
+    "file": "cmp7.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "cmp8.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "cmp9.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "cmp10.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "cmp11.rsc",
+    "result": [
+      1,
+      0
+    ]
+  },
+  {
+    "file": "cmp12.rsc",
+    "result": [
+      1,
+      0
+    ]
+  },
+  {
+    "file": "cmp13.rsc",
+    "result": [
+      1,
+      0
+    ]
+  },
+  {
+    "file": "cmp14.rsc",
+    "result": [
+      1,
+      0
+    ]
+  },
+  {
+    "file": "cmp15.rsc",
+    "result": [
+      0,
+      1
+    ]
+  },
+  {
+    "file": "cmp16.rsc",
+    "result": [
+      0,
+      1
+    ]
+  },
+  {
+    "file": "cmp17.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "cmp18.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "cmp19.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "cmp20.rsc",
+    "result": [
+      1,
+      1
+    ]
+  },
+  {
+    "file": "arith1.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith2.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith3.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith4.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith5.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith6.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith7.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith8.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith9.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith10.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith11.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith12.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith13.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith14.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith15.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith16.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith17.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith18.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith19.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "arith20.rsc",
+    "result": []
+  },
+  {
+    "file": "arith21.rsc",
+    "result": []
+  },
+  {
+    "file": "arith22.rsc",
+    "result": []
+  },
+  {
+    "file": "arith23.rsc",
+    "result": []
+  },
+  {
+    "file": "arith24.rsc",
+    "result": []
+  },
+  {
+    "file": "arith25.rsc",
+    "result": []
+  },
+  {
+    "file": "arith26.rsc",
+    "result": []
+  },
+  {
+    "file": "arith27.rsc",
+    "result": []
+  },
+  {
+    "file": "arith28.rsc",
+    "result": []
+  },
+  {
+    "file": "arith29.rsc",
+    "result": []
+  },
+  {
+    "file": "arith30.rsc",
+    "result": []
+  },
+  {
+    "file": "arith31.rsc",
+    "result": []
+  },
+  {
+    "file": "arith32.rsc",
+    "result": []
+  },
+  {
+    "file": "arith33.rsc",
+    "result": []
+  },
+  {
+    "file": "arith34.rsc",
+    "result": []
+  },
+  {
+    "file": "arith35.rsc",
+    "result": []
+  },
+  {
+    "file": "arith36.rsc",
+    "result": []
+  },
+  {
+    "file": "arith37.rsc",
+    "result": []
+  },
+  {
+    "file": "arith38.rsc",
+    "result": []
+  },
+  {
+    "file": "arith39.rsc",
+    "result": []
+  },
+  {
+    "file": "arith40.rsc",
+    "result": []
+  },
+  {
+    "file": "mem1.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "mem2.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "mem3.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "mem4.rsc",
+    "result": [
+      42
+    ]
+  },
+  {
+    "file": "memswap.rsc",
+    "result": [
+      42
+    ]
+  }
+]
