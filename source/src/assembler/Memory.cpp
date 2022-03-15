@@ -19,8 +19,10 @@ namespace Assembler {
                 }
 
                 case LINE_SET:
-                    memory_layout[line.base_address] = eval(line.value.setValue.value,
-                                                            line.base_address, symbol_table);
+                    if (line.value.setValue.memoryAddress.variant != PRIMITIVE_SYMBOL) {
+                        memory_layout[line.base_address] = eval(line.value.setValue.value,
+                                                                line.base_address, symbol_table);
+                    }
                     break;
 
                 default:

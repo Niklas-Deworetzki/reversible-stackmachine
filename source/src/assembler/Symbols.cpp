@@ -52,7 +52,7 @@ namespace Assembler {
     static void layout_fixed(MemoryLayout &memory_layout, SymbolTable &symbol_table, Section &section) {
         iterate_section(section, [&](Line &line) {
             if (line.variant == LINE_SET && line.value.setValue.memoryAddress.variant != PRIMITIVE_SYMBOL) {
-                int32_t address = restrict_eval(line.value.setValue.memoryAddress);
+                const int32_t address = restrict_eval(line.value.setValue.memoryAddress);
 
                 if (memory_layout.contains(address)) {
                     throw set_address_clash(address);
@@ -60,6 +60,11 @@ namespace Assembler {
 
                 memory_layout[address] = DEFAULT_MEMORY_VALUE;
                 enter_symbols(symbol_table, line, address);
+            } else if (line.variant == LINE_SET) {
+                const int32_t value = restrict_eval(line.value.setValue.value);
+
+                enter_symbol(symbol_table, line.value.setValue.memoryAddress.instance.primitive.value.symbol, value);
+                enter_symbols(symbol_table, line, value);
             }
         });
     }
@@ -96,15 +101,8 @@ namespace Assembler {
                     break;
                 }
 
-                case LINE_SET: {
-                    if (line.value.setValue.memoryAddress.variant == PRIMITIVE_SYMBOL) {
-                        int32_t allocatedAddress = allocate_range(memory_layout, base_address, 1);
-                        enter_symbols(symbol_table, line, allocatedAddress);
-                        enter_symbol(symbol_table, line.value.setValue.memoryAddress.instance.primitive.value.symbol,
-                                     allocatedAddress);
-                    }
-                    break;
-                }
+                case LINE_SET:
+                    break; // Nothing to do here.
             }
         });
     }
