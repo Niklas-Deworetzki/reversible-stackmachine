@@ -24,7 +24,7 @@ In this mode, instruction operands, stack overflows and stack underflows are not
 Additionally, no checks are performed when clearing a stack slot.
 This means, that cases where a program might become irreversible are not explicitly checked, for example if a wrong constant is popped from the stack or a local variable is not cleared at the end of a procedure.
 In a correct program, these cases should not occur, making it viable to squeeze out additional performance in these cases.
-Even in this mode, a program can stil fail, if it performs illegal arithmetic instructions or accesses protected memory regions.
+Even in this mode, a program can still fail, if it performs illegal arithmetic instructions or accesses protected memory regions.
 
 To build the executable in the performance-optimized mode, the `UNSAFE_OPERATIONS` preprocessor macro must be defined.
 This can be achieved by enabling the equally-named CMake option:
@@ -37,6 +37,22 @@ To force a rebuild of the executable, the `target` directory can be deleted.
 
 ## General Design
 
+The machine is modeled after the *Harvard Architecture*, having distinct memory areas for the operand stack, program instructions and the global heap.
+Its central processing unit holds 5 registers: 
+1. The stack pointer **sp**, which points to the next free stack slot on the operand stack memory area.
+2. The frame pointer **fp**, which is used to build stack frames on the operand stack, making stack slots addressable via an index.
+3. The program counter **pc**, that points to the currently executed instruction.
+4. The direction register **dir**, that represents the current execution direction. It is either *1* during forward execution or *-1* during backward execution.
+5. The branching register **br**, which is used for control flow.
+
+Executed instructions come in pairs, which are mutually inverse.
+During backwards execution, the inverse element of a pair is executed instead of the regular instruction that is given in the program code.
+This way, reversibility is ensured.
+
+Consider an instruction `pushc 9`, which places the constant value 9 on the stack and increases the stack pointer by 1.
+Its inverse isntruction is `popc 9`, which decrements the stack pointer by 1 and removes the constant value 9 from the stack.
+Executing `pushc 9` backwards will run `popc 9` and vice versa.
+Self-inverse instructions such as `swap` are paired with themselfes, having two opcodes available for a single instruction.
 
 ## Project Name
 
