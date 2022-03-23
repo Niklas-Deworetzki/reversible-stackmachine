@@ -7,13 +7,34 @@
 namespace Assembler {
     using std::cerr, std::endl;
 
-    [[nodiscard]] std::vector<int32_t> translate_program(const Program &program, const SymbolTable &symbol_table) {
+    [[nodiscard]] std::tuple<std::vector<int32_t>, int32_t> translate_program(
+            const Program &program, const SymbolTable &symbol_table) {
         std::vector<int32_t> result;
-        bool contains_halt = false;
+
+        bool contains_start = false, contains_stop = false;
+        int32_t entry_address = 0;
 
         iterate_section(program.code, [&](const Line &line) {
             const Instruction &instruction = line.value.instruction;
-            contains_halt = contains_halt || (strcmp(instruction.data->fw_mnemonic, "halt") == 0);
+
+            const char *mnemonic = instruction.is_forward
+                                   ? instruction.data->fw_mnemonic
+                                   : instruction.data->bw_mnemonic;
+            if (strcmp(mnemonic, "start") == 0) {
+                if (contains_start) {
+                    throw start_stop_presence("start");
+                }
+
+                contains_start = true;
+                entry_address = line.base_address;
+
+            } else if (strcmp(mnemonic, "stop") == 0) {
+                if (contains_stop) {
+                    throw start_stop_presence("stop");
+                }
+
+                contains_stop = true;
+            }
 
             const int32_t opcode = instruction.data->binary << OPERAND_WIDTH;
             int32_t operand = eval(instruction.operand, line.base_address, symbol_table);
@@ -42,9 +63,6 @@ namespace Assembler {
             result.push_back(opcode | operand);
         });
 
-        if (!contains_halt) {
-            cerr << "[WARNING] Program does not contain a 'halt' instruction. It can only exit abnormally." << endl;
-        }
-        return result;
+        return {result, entry_address};
     }
 }
