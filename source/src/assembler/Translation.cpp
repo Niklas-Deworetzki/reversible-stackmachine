@@ -52,6 +52,8 @@ namespace Assembler {
                         fprintf(stderr,
                                 "[WARNING] Line %d: Operand is discarded. Instruction %s does not accept an operand, but %d is provided.\n",
                                 line.linenumber, instruction.data->fw_mnemonic, operand);
+                        // Enforce discarding of operands. Keeping the value would change the instructions bit-pattern.
+                        operand = 0;
                     }
                     break;
 
