@@ -1,4 +1,4 @@
-_start:
+    start
     pushc -42
     neg
-    halt
+    stop

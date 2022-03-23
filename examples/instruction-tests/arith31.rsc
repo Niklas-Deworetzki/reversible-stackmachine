@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 0x01
     pushc 0x10
     arpushand
@@ -6,4 +6,4 @@ _start:
 
     popc 0x10
     popc 0x01
-    halt
+    stop

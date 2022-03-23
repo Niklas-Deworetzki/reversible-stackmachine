@@ -1,4 +1,4 @@
-_start:
+    start
     pushc [t - @1]
     uncall
 
@@ -13,4 +13,4 @@ _start:
 t:
     uncall
     popc 8
-    halt
+    stop

@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 1
     pushc 2
     pushc 3
@@ -9,4 +9,4 @@ _start:
     swap
     popc 2
 
-    halt
+    stop

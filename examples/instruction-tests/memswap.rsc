@@ -1,7 +1,7 @@
 data:
 .word 0 42
 
-_start:
+    start
     pushc [data + 0]
     pushc [data + 1]
     memswap
@@ -9,4 +9,4 @@ _start:
     popc [data + 0]
 
     pushm [data + 0]
-    halt
+    stop

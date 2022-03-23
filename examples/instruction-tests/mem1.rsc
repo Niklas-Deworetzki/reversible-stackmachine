@@ -1,6 +1,6 @@
 data:
 .word 42
 
-_start:
+    start
     pushm data
-    halt
+    stop

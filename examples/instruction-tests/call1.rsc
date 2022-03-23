@@ -1,4 +1,4 @@
-_start:
+    start
     pushc [t - @1]
     call
 
@@ -12,4 +12,4 @@ _start:
 
 t:
     call
-    halt
+    stop

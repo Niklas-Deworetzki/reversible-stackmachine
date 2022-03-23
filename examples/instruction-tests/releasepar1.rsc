@@ -1,3 +1,3 @@
-_start:
+    start
     releasepar 0
-    halt
+    stop

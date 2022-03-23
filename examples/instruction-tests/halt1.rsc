@@ -1,2 +1,2 @@
-_start:
-    halt
+    start
+    stop

@@ -1,5 +1,5 @@
-_start:
+    start
     pushtrue
     neg
     popfalse
-    halt
+    stop

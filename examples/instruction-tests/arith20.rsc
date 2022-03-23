@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 2
     pushc 6
     arpushmul
@@ -6,4 +6,4 @@ _start:
 
     popc 6
     popc 2
-    halt
+    stop

@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 5
     pushc 6
     arpushmod
@@ -6,4 +6,4 @@ _start:
 
     popc 6
     popc 5
-    halt
+    stop

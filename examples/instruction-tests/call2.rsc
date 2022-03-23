@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 0
     branch t
 
@@ -12,4 +12,4 @@ _start:
 
 t:
     call
-    halt
+    stop

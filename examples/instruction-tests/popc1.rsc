@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 1
     popc  1
-    halt
+    stop
