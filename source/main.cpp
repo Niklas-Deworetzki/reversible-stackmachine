@@ -211,7 +211,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (machine.state == Machine::ILLEGAL_INSTRUCTION)
+        if (machine.running)
             return 1;
         else
             return 0;
