@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) {
         const auto start = std::chrono::high_resolution_clock::now();
 
         Program program = parse_file(input_file);
-        const auto &[memory, code, entry_address] = assemble(program, entry_point);
+        const auto &[memory, code, entry_address] = assemble(program);
         Machine::VM machine(code, memory, memory_size, stack_size, entry_address);
 
         const auto loaded = std::chrono::high_resolution_clock::now();
