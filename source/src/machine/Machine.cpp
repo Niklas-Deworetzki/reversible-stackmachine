@@ -94,9 +94,11 @@ namespace Machine {
         const int32_t opcode = (instruction >> OPERAND_WIDTH) & OPCODE_WIDTH_MASK;
 
         switch (dir == Forward ? opcode : INVERSE(opcode)) {
-            case opcodeFor("halt"):
-            case INVERSE(opcodeFor("halt")):
-                state = STOPPED;
+            case opcode_for("start"):
+                this->running += Direction::Forward;
+                break;
+            case opcode_for("stop"):
+                this->running += Direction::Backward;
                 break;
 
             case opcode_for("nop"):
@@ -382,7 +384,7 @@ namespace Machine {
                 break;
 
             default:
-                state = ILLEGAL_INSTRUCTION;
+                throw illegal_instruction(instruction, opcode);
         }
     }
 
@@ -394,8 +396,9 @@ namespace Machine {
     }
 
     void VM::run() {
-        while (this->state == RUNNING)
+        do {
             this->step();
+        } while (this->running);
     }
 
     VM::VM(const std::vector<int32_t> &program,
@@ -405,7 +408,7 @@ namespace Machine {
            const int32_t pc) :
             dir(Forward), pc(pc), br(0), sp(0), fp(0),
             memory(memory_size), stack(stack_size),
-            state(RUNNING), counter(0), program(program) {
+            running(0), counter(0), program(program) {
         for (const auto &[address, value]: memory_layout) {
             memory.at(address) = value;
         }
