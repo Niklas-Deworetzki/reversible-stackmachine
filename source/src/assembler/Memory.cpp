@@ -32,9 +32,9 @@ namespace Assembler {
         });
     }
 
-    void build_memory(const Program &program, const SymbolTable &symbol_table, MemoryLayout &memoryLayout) {
-        buildMemorySection(program.data, symbol_table, memoryLayout);
-        buildMemorySection(program.bss, symbol_table, memoryLayout);
+    void build_memory(const Program &program, const SymbolTable &symbol_table, MemoryLayout &memory_layout) {
+        buildMemorySection(program.data, symbol_table, memory_layout);
+        buildMemorySection(program.bss, symbol_table, memory_layout);
     }
 }
 
