@@ -8,7 +8,7 @@
 #include "assembler/Assembler.h"
 #include "machine/Machine.h"
 
-#define VERSION_NUMBER "1.2"
+#define VERSION_NUMBER "2.0"
 static const char *version_string = "Stackmachine VM version " VERSION_NUMBER " (compiled " __DATE__ ")";
 
 static const char *help_page =
