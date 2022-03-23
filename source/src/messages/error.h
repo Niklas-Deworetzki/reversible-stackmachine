@@ -40,7 +40,8 @@ public:
 
 class parse_error : public error_message {
 public:
-    explicit parse_error(unsigned int count) : error_message("Detected " + std::to_string(count) + " syntax error(s).") {}
+    explicit parse_error(unsigned int count) : error_message(
+            "Detected " + std::to_string(count) + " syntax error(s).") {}
 
     ~parse_error() override = default;
 };
@@ -75,4 +76,10 @@ public:
             "Section contains illegal content.") {}
 
     ~illegal_section_content() override = default;
+};
+
+class start_stop_presence : public error_message {
+public:
+    explicit start_stop_presence(const char *mnemonic) : error_message(
+            std::string("Programs must define exactly 1 ") + mnemonic + " instruction.") {}
 };
