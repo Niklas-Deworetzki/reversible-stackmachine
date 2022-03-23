@@ -31,10 +31,9 @@ namespace Assembler {
 
     void build_memory(const Program &program, const SymbolTable &symbol_table, MemoryLayout &memoryLayout);
 
-    [[nodiscard]] std::vector<int32_t> translate_program(const Program &program, const SymbolTable &symbol_table);
+    [[nodiscard]] std::tuple<std::vector<int32_t>, int32_t> translate_program(
+            const Program &program, const SymbolTable &symbol_table);
 
-
-    [[nodiscard]] std::tuple<MemoryLayout, std::vector<int32_t>, int32_t> assemble(
-            Program &program, std::optional<std::string> &entry_point);
+    [[nodiscard]] std::tuple<MemoryLayout, std::vector<int32_t>, int32_t> assemble(Program &program);
 
 }
