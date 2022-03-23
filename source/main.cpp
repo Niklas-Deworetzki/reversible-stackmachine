@@ -26,9 +26,6 @@ static const char *help_page =
         "    Configures the amount of values the operand stack can hold.\n"
         " -m, --memsize [SIZE]\n"
         "    Configures the amount of values the program memory can hold.\n"
-        " -S, --start [SYMBOL]\n"
-        "    Starts the execution of a program at the given label. If this label is\n"
-        "    not defined within the program, execution will begin at address 0.\n"
         "\n"
         "Both [SIZE] arguments may be any number, optionally suffixed by a size unit.\n"
         "Supported units are: k (1024^1), m (1024^2), g (1024^3).\n"
@@ -115,7 +112,6 @@ static bool parse_size(const char *arg, size_t &result) {
 
 int main(int argc, char *argv[]) {
     const char *input_file = nullptr;
-    std::optional<std::string> entry_point;
     bool should_display_help = false,
             should_display_version = false,
             should_display_info = false,
@@ -151,10 +147,6 @@ int main(int argc, char *argv[]) {
                 cerr << "Invalid memory size: " << argv[i] << endl;
                 user_error = true;
             }
-        } else if (!path_separator && matches(current_arg, {"--start", "-S"})) {
-            REQUIRES_ARGS(1)
-            i += 1;
-            entry_point = argv[i];
         } else if (!path_separator && strcmp(current_arg, "--") == 0) {
             path_separator = true;
         } else if (!path_separator && current_arg[0] == '-') {
