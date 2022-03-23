@@ -59,7 +59,7 @@ namespace Machine {
         return *a == *b && strequal(a + 1, b + 1);
     }
 
-    static constexpr int32_t opcodeFor(const char *mnemonic) {
+    static constexpr int32_t opcode_for(const char *mnemonic) {
         for (const auto &instruction: KNOWN_INSTRUCTIONS) {
             if (strequal(instruction.fw_mnemonic, mnemonic)) {
                 return instruction.binary;
@@ -99,42 +99,42 @@ namespace Machine {
                 state = STOPPED;
                 break;
 
-            case opcodeFor("nop"):
-            case INVERSE(opcodeFor("nop")):
+            case opcode_for("nop"):
+            case INVERSE(opcode_for("nop")):
                 break;
 
-            case opcodeFor("pushc"):
+            case opcode_for("pushc"):
                 PUSHES_VALUES(1);
                 stack[sp] = operand;
                 sp += 1;
                 break;
 
-            case opcodeFor("popc"):
+            case opcode_for("popc"):
                 REQUIRES_PARAMS(1);
                 sp -= 1;
                 clear(stack[sp], operand);
                 break;
 
-            case opcodeFor("dup"):
+            case opcode_for("dup"):
                 PUSHES_VALUES(1);
                 REQUIRES_PARAMS(1);
                 stack[sp] = stack[sp - 1];
                 sp += 1;
                 break;
 
-            case opcodeFor("undup"):
+            case opcode_for("undup"):
                 REQUIRES_PARAMS(2);
                 sp -= 1;
                 clear(stack[sp], stack[sp - 1]);
                 break;
 
-            case opcodeFor("swap"):
-            case INVERSE(opcodeFor("swap")):
+            case opcode_for("swap"):
+            case INVERSE(opcode_for("swap")):
                 REQUIRES_PARAMS(2);
                 swap(stack[sp - 1], stack[sp - 2]);
                 break;
 
-            case opcodeFor("bury"): {
+            case opcode_for("bury"): {
                 REQUIRES_PARAMS(3);
                 int32_t sp1(stack[sp - 1]), sp2(stack[sp - 2]), sp3(stack[sp - 3]);
                 stack[sp - 3] = sp1;
@@ -142,7 +142,7 @@ namespace Machine {
                 stack[sp - 1] = sp2;
                 break;
             }
-            case opcodeFor("dig"): {
+            case opcode_for("dig"): {
                 REQUIRES_PARAMS(3);
                 int32_t sp1(stack[sp - 1]), sp2(stack[sp - 2]), sp3(stack[sp - 3]);
                 stack[sp - 1] = sp3;
@@ -151,12 +151,12 @@ namespace Machine {
                 break;
             }
 
-            case opcodeFor("allocpar"):
+            case opcode_for("allocpar"):
                 ASSERT_POSITIVE(operand);
                 PUSHES_VALUES(operand);
                 sp += operand;
                 break;
-            case opcodeFor("releasepar"):
+            case opcode_for("releasepar"):
                 ASSERT_POSITIVE(operand);
                 REQUIRES_PARAMS(operand);
                 for (int i = 1; i <= operand; ++i) {
@@ -165,14 +165,14 @@ namespace Machine {
                 sp -= operand;
                 break;
 
-            case opcodeFor("asf"):
+            case opcode_for("asf"):
                 ASSERT_POSITIVE(operand);
                 PUSHES_VALUES(operand + 1);
                 stack[sp] = fp;
                 fp = sp;
                 sp += operand + 1;
                 break;
-            case opcodeFor("rsf"):
+            case opcode_for("rsf"):
                 ASSERT_POSITIVE(operand);
                 REQUIRES_PARAMS(operand + 1);
                 for (int i = 1; i <= operand; ++i) {
@@ -184,26 +184,26 @@ namespace Machine {
                 swap(fp, stack[sp]);
                 break;
 
-            case opcodeFor("pushl"):
+            case opcode_for("pushl"):
                 PUSHES_VALUES(1);
                 swap(stack[sp], stack.at(fp + operand));
                 sp += 1;
                 break;
-            case opcodeFor("popl"):
+            case opcode_for("popl"):
                 REQUIRES_PARAMS(1);
                 sp -= 1;
                 swap(stack[sp], stack.at(fp + operand));
                 clear(stack[sp], 0);
                 break;
 
-            case opcodeFor("call"):
-            case INVERSE(opcodeFor("call")):
+            case opcode_for("call"):
+            case INVERSE(opcode_for("call")):
                 REQUIRES_PARAMS(1);
                 swap(br, stack[sp - 1]);
                 break;
 
-            case opcodeFor("uncall"):
-            case INVERSE(opcodeFor("uncall")):
+            case opcode_for("uncall"):
+            case INVERSE(opcode_for("uncall")):
                 REQUIRES_PARAMS(1);
                 br = -br;
                 stack[sp - 1] = -stack[sp - 1];
@@ -211,102 +211,102 @@ namespace Machine {
                 dir = !dir;
                 break;
 
-            case opcodeFor("branch"):
-            case INVERSE(opcodeFor("branch")):
+            case opcode_for("branch"):
+            case INVERSE(opcode_for("branch")):
                 br += dir * operand;
                 break;
 
-            case opcodeFor("brt"):
-            case INVERSE(opcodeFor("brt")):
+            case opcode_for("brt"):
+            case INVERSE(opcode_for("brt")):
                 REQUIRES_PARAMS(1);
                 if (stack[sp - 1] == True) {
                     br += dir * operand;
                 }
                 break;
 
-            case opcodeFor("brf"):
-            case INVERSE(opcodeFor("brf")):
+            case opcode_for("brf"):
+            case INVERSE(opcode_for("brf")):
                 REQUIRES_PARAMS(1);
                 if (stack[sp - 1] == False) {
                     br += dir * operand;
                 }
                 break;
 
-            case opcodeFor("pushtrue"):
+            case opcode_for("pushtrue"):
                 PUSHES_VALUES(1);
                 stack[sp] = True;
                 sp += 1;
                 break;
-            case opcodeFor("poptrue"):
+            case opcode_for("poptrue"):
                 REQUIRES_PARAMS(1);
                 sp -= 1;
                 clear(stack[sp], True);
                 break;
 
-            case opcodeFor("pushfalse"):
+            case opcode_for("pushfalse"):
                 PUSHES_VALUES(1);
                 stack[sp] = False;
                 sp += 1;
                 break;
-            case opcodeFor("popfalse"):
+            case opcode_for("popfalse"):
                 REQUIRES_PARAMS(1);
                 sp -= 1;
                 clear(stack[sp], False);
                 break;
 
-            case opcodeFor("cmpusheq"): CMPUSH(==)
+            case opcode_for("cmpusheq"): CMPUSH(==)
                 break;
-            case opcodeFor("cmpopeq"): CMPOP(==)
+            case opcode_for("cmpopeq"): CMPOP(==)
                 break;
-            case opcodeFor("cmpushne"): CMPUSH(!=)
+            case opcode_for("cmpushne"): CMPUSH(!=)
                 break;
-            case opcodeFor("cmpopne"): CMPOP(!=)
+            case opcode_for("cmpopne"): CMPOP(!=)
                 break;
-            case opcodeFor("cmpushlt"): CMPUSH(<)
+            case opcode_for("cmpushlt"): CMPUSH(<)
                 break;
-            case opcodeFor("cmpoplt"): CMPOP(<)
+            case opcode_for("cmpoplt"): CMPOP(<)
                 break;
-            case opcodeFor("cmpushle"): CMPUSH(<=)
+            case opcode_for("cmpushle"): CMPUSH(<=)
                 break;
-            case opcodeFor("cmpople"): CMPOP(<=)
+            case opcode_for("cmpople"): CMPOP(<=)
                 break;
 
-            case opcodeFor("inc"):
+            case opcode_for("inc"):
                 REQUIRES_PARAMS(1);
                 stack[sp - 1] += operand;
                 break;
-            case opcodeFor("dec"):
+            case opcode_for("dec"):
                 REQUIRES_PARAMS(1);
                 stack[sp - 1] -= operand;
                 break;
 
-            case opcodeFor("neg"):
-            case INVERSE(opcodeFor("neg")):
+            case opcode_for("neg"):
+            case INVERSE(opcode_for("neg")):
                 REQUIRES_PARAMS(1);
                 stack[sp - 1] = -stack[sp - 1];
                 break;
 
-            case opcodeFor("add"):
+            case opcode_for("add"):
                 REQUIRES_PARAMS(2);
                 stack[sp - 1] += stack[sp - 2];
                 break;
-            case opcodeFor("sub"):
+            case opcode_for("sub"):
                 REQUIRES_PARAMS(2);
                 stack[sp - 1] -= stack[sp - 2];
                 break;
-            case opcodeFor("xor"):
-            case INVERSE(opcodeFor("xor")):
+            case opcode_for("xor"):
+            case INVERSE(opcode_for("xor")):
                 REQUIRES_PARAMS(2);
                 stack[sp - 1] ^= stack[sp - 2];
                 break;
-            case opcodeFor("shl"): {
+            case opcode_for("shl"): {
                 REQUIRES_PARAMS(2);
                 uint32_t value = *reinterpret_cast<uint32_t *>(&stack[sp - 1]);
                 value = std::rotl(value, stack[sp - 2]);
                 stack[sp - 1] = *reinterpret_cast<int32_t *>(&value);
                 break;
             }
-            case opcodeFor("shr"): {
+            case opcode_for("shr"): {
                 REQUIRES_PARAMS(2);
                 uint32_t value = *reinterpret_cast<uint32_t *>(&stack[sp - 1]);
                 value = std::rotr(value, stack[sp - 2]);
@@ -314,68 +314,68 @@ namespace Machine {
                 break;
             }
 
-            case opcodeFor("arpushadd"): ARPUSH(+)
+            case opcode_for("arpushadd"): ARPUSH(+)
                 break;
-            case opcodeFor("arpopadd"): ARPOP(+)
+            case opcode_for("arpopadd"): ARPOP(+)
                 break;
-            case opcodeFor("arpushsub"): ARPUSH(-)
+            case opcode_for("arpushsub"): ARPUSH(-)
                 break;
-            case opcodeFor("arpopsub"): ARPOP(-)
+            case opcode_for("arpopsub"): ARPOP(-)
                 break;
-            case opcodeFor("arpushmul"): ARPUSH(*)
+            case opcode_for("arpushmul"): ARPUSH(*)
                 break;
-            case opcodeFor("arpopmul"): ARPOP(*)
+            case opcode_for("arpopmul"): ARPOP(*)
                 break;
-            case opcodeFor("arpushdiv"): ARPUSH(/)
+            case opcode_for("arpushdiv"): ARPUSH(/)
                 break;
-            case opcodeFor("arpopdiv"): ARPOP(/)
+            case opcode_for("arpopdiv"): ARPOP(/)
                 break;
-            case opcodeFor("arpushmod"): ARPUSH(%)
+            case opcode_for("arpushmod"): ARPUSH(%)
                 break;
-            case opcodeFor("arpopmod"): ARPOP(%)
+            case opcode_for("arpopmod"): ARPOP(%)
                 break;
-            case opcodeFor("arpushand"): ARPUSH(&)
+            case opcode_for("arpushand"): ARPUSH(&)
                 break;
-            case opcodeFor("arpopand"): ARPOP(&)
+            case opcode_for("arpopand"): ARPOP(&)
                 break;
-            case opcodeFor("arpushor"): ARPUSH(|)
+            case opcode_for("arpushor"): ARPUSH(|)
                 break;
-            case opcodeFor("arpopor"): ARPOP(|)
+            case opcode_for("arpopor"): ARPOP(|)
                 break;
 
-            case opcodeFor("pushm"):
+            case opcode_for("pushm"):
                 PUSHES_VALUES(1);
                 swap(stack[sp], memory.at(operand));
                 sp += 1;
                 break;
-            case opcodeFor("popm"):
+            case opcode_for("popm"):
                 REQUIRES_PARAMS(1);
                 sp -= 1;
                 swap(stack[sp], memory.at(operand));
                 clear(stack[sp], 0);
                 break;
 
-            case opcodeFor("load"):
+            case opcode_for("load"):
                 PUSHES_VALUES(1);
                 REQUIRES_PARAMS(1);
                 swap(stack[sp], memory.at(stack[sp - 1] + operand));
                 sp += 1;
                 break;
-            case opcodeFor("store"):
+            case opcode_for("store"):
                 REQUIRES_PARAMS(2);
                 sp -= 1;
                 swap(stack[sp], memory.at(stack[sp - 1] + operand));
                 clear(stack[sp], 0);
                 break;
 
-            case opcodeFor("memswap"):
-            case INVERSE(opcodeFor("memswap")):
+            case opcode_for("memswap"):
+            case INVERSE(opcode_for("memswap")):
                 REQUIRES_PARAMS(2);
                 swap(memory.at(stack[sp - 1]), memory.at(stack[sp - 2]));
                 break;
 
-            case opcodeFor("xorhc"):
-            case INVERSE(opcodeFor("xorhc")):
+            case opcode_for("xorhc"):
+            case INVERSE(opcode_for("xorhc")):
                 REQUIRES_PARAMS(1);
                 // Don't use operand here, since it is sign-extended and we want the raw bits.
                 stack[sp - 1] ^= (instruction & OPCODE_WIDTH_MASK) << (OPERAND_WIDTH - 1);
