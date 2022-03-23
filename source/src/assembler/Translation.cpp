@@ -17,10 +17,7 @@ namespace Assembler {
         iterate_section(program.code, [&](const Line &line) {
             const Instruction &instruction = line.value.instruction;
 
-            const char *mnemonic = instruction.is_forward
-                                   ? instruction.data->fw_mnemonic
-                                   : instruction.data->bw_mnemonic;
-            if (strcmp(mnemonic, "start") == 0) {
+            if (strcmp(instruction.data->fw_mnemonic, "start") == 0) {
                 if (contains_start) {
                     throw start_stop_presence("start");
                 }
@@ -28,7 +25,7 @@ namespace Assembler {
                 contains_start = true;
                 entry_address = line.base_address;
 
-            } else if (strcmp(mnemonic, "stop") == 0) {
+            } else if (strcmp(instruction.data->fw_mnemonic, "stop") == 0) {
                 if (contains_stop) {
                     throw start_stop_presence("stop");
                 }
