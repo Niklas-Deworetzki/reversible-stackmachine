@@ -7,6 +7,7 @@
 
 .set input 19
 
+        start
         pushc input     ; Start with input number
 
         pushtrue
@@ -89,4 +90,4 @@ repeat:
 ; We reached 1, remove condition from stack.
         poptrue
 
-        halt
+        stop

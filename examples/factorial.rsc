@@ -4,7 +4,8 @@
 
 ; Set the value of a symbol without allocating memory.
 .set input 5
-
+        
+        start
         pushc input ; Initialize counter.
         pushc 1     ; Initialize accumulator.
 
@@ -44,4 +45,4 @@ loop_bot:
         swap
         popc 0      ; Counter must be 0 when exiting loop.
 
-        halt
+        stop

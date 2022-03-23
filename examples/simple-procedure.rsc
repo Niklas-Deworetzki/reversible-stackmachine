@@ -4,6 +4,7 @@
 ;
 ; (C) 2022, Niklas Deworetzki
 
+                start
                 allocpar 1  ; Allocate dummy argument as placeholder for result.
                 pushc 5     ; Push input argument for call.
 
@@ -11,7 +12,7 @@
 L_Call:         call
                 popc [L_Call - countToN]
 
-                halt
+                stop
 
 
 countToN_top:   branch countToN_bot
