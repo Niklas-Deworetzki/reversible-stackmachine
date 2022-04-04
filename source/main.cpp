@@ -7,8 +7,9 @@
 #include "syntax/Syntax.h"
 #include "assembler/Assembler.h"
 #include "machine/Machine.h"
+#include "entropy/entropy.h"
 
-#define VERSION_NUMBER "2.0"
+#define VERSION_NUMBER "2.1"
 static const char *version_string = "Stackmachine VM version " VERSION_NUMBER " (compiled " __DATE__ ")";
 
 static const char *help_page =
@@ -20,6 +21,10 @@ static const char *help_page =
         " -i, --information\n"
         "    Print runtime information like execution time, time required to load the\n"
         "    program and executed instructions per second.\n"
+        " -e, -E\n"
+        "    Display how much information is present in the machine state after\n"
+        "    execution finished. To measure the amount of information, either the\n"
+        "    hamming weight or the amount of uncleared words can be used.\n"
         " -q, --quiet\n"
         "    Do not output anything if the stack is empty after the program finished.\n"
         " -s, --stacksize [SIZE]\n"
@@ -109,9 +114,9 @@ static bool parse_size(const char *arg, size_t &result) {
         continue;                                                                   \
     }                                                                               \
 
-
 int main(int argc, char *argv[]) {
     const char *input_file = nullptr;
+    Entropy::Measure entropy_measure = Entropy::Measure::NONE;
     bool should_display_help = false,
             should_display_version = false,
             should_display_info = false,
@@ -147,6 +152,12 @@ int main(int argc, char *argv[]) {
                 cerr << "Invalid memory size: " << argv[i] << endl;
                 user_error = true;
             }
+
+        } else if (!path_separator && matches(current_arg, {"-e", "--entropy=bit"})) {
+            entropy_measure = Entropy::Measure::HAMMING_WEIGHT;
+        } else if (!path_separator && matches(current_arg, {"-E", "--entropy=word"})) {
+            entropy_measure = Entropy::Measure::WORD_DIFFERENCE;
+
         } else if (!path_separator && strcmp(current_arg, "--") == 0) {
             path_separator = true;
         } else if (!path_separator && current_arg[0] == '-') {
@@ -178,19 +189,22 @@ int main(int argc, char *argv[]) {
         return 2;
 
     try {
-        const auto start = std::chrono::high_resolution_clock::now();
-
+        const auto load_start = std::chrono::high_resolution_clock::now();
         Program program = parse_file(input_file);
         const auto &[memory, code, entry_address] = assemble(program);
         Machine::VM machine(code, memory, memory_size, stack_size, entry_address);
+        const auto load_stop = std::chrono::high_resolution_clock::now();
 
-        const auto loaded = std::chrono::high_resolution_clock::now();
-
+        const auto exec_start = std::chrono::system_clock::now();
         machine.run();
+        const auto exec_stop = std::chrono::system_clock::now();
 
-        const auto finished = std::chrono::system_clock::now();
         if (should_display_info) {
-            report_runtime_statistics(machine, loaded - start, finished - loaded);
+            report_runtime_statistics(machine, load_stop - load_start, exec_stop - exec_start);
+        }
+
+        if (entropy_measure != Entropy::Measure::NONE) {
+            Entropy::report_entropy(entropy_measure, memory, machine);
         }
 
         if (machine.sp == 0) {

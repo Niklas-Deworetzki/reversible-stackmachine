@@ -43,6 +43,6 @@ add_executable(stackmachine
         src/machine/Machine.cpp
         src/assembler/Assembler.cpp src/assembler/Eval.cpp src/assembler/Memory.cpp src/assembler/Symbols.cpp src/assembler/Translation.cpp
         src/syntax/csyntax.c src/syntax/Syntax.cpp src/syntax/Instructions.cpp
-        )
+        src/entropy/entropy.cpp)
 
 
