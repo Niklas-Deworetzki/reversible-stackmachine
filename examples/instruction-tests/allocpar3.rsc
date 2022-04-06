@@ -1,4 +1,4 @@
-_start:
+    start
     allocpar 10
 
     popc 0
@@ -12,4 +12,4 @@ _start:
     popc 0
     popc 0
 
-    halt
+    stop

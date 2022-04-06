@@ -10,7 +10,7 @@ numbers_end:                ; Another label marks the end of memory region.
 accumulator:                ; Initialize an in-memory accumulator with
     .word 0                 ; the value of 0.
 
-
+            start
 ; Push the range bounds on the stack.
             pushc numbers_end
             pushc numbers
@@ -46,4 +46,4 @@ loop_bot:   brt loop_top
             pushm accumulator
 
 ; Stop execution.
-            halt
+            stop

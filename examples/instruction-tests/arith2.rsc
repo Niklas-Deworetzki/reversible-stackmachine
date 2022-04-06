@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 20
     dec -22
-    halt
+    stop

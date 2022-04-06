@@ -213,7 +213,9 @@
   },
   {
     "file": "uncall1.rsc",
-    "result": []
+    "result": [
+        -10
+    ]
   },
   {
     "file": "uncall2.rsc",

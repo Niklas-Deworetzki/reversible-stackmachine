@@ -1,8 +1,8 @@
-_start:
+    start
     pushtrue
     pushtrue
     arpushor
     poptrue
     poptrue
     poptrue
-    halt
+    stop

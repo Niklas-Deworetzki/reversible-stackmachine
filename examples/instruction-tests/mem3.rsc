@@ -1,9 +1,9 @@
 data:
 .word 42
 
-_start:
+    start
     pushc data
     load
     swap
     popc data
-    halt
+    stop

@@ -121,7 +121,7 @@ struct InstructionData {
 };
 
 constexpr InstructionData KNOWN_INSTRUCTIONS[] = {
-        {"halt",      "halt",       OperandMode::NO_OPERAND, 0},
+        {"start",     "stop",       OperandMode::NO_OPERAND, 0},
         {"nop",       "nop",        OperandMode::NO_OPERAND, 1},
 
         {"pushc",     "popc",       OperandMode::ABSOLUTE,   2},

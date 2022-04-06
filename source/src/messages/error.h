@@ -2,6 +2,7 @@
 
 #include <string>
 #include <utility>
+#include <sstream>
 
 class error_message : public std::exception {
     std::string _msg;
@@ -40,7 +41,8 @@ public:
 
 class parse_error : public error_message {
 public:
-    explicit parse_error(unsigned int count) : error_message("Detected " + std::to_string(count) + " syntax error(s).") {}
+    explicit parse_error(unsigned int count) : error_message(
+            "Detected " + std::to_string(count) + " syntax error(s).") {}
 
     ~parse_error() override = default;
 };
@@ -75,4 +77,23 @@ public:
             "Section contains illegal content.") {}
 
     ~illegal_section_content() override = default;
+};
+
+class start_stop_presence : public error_message {
+public:
+    explicit start_stop_presence(const char *mnemonic) : error_message(
+            std::string("Programs must define exactly 1 ") + mnemonic + " instruction.") {}
+};
+
+static std::string hex_format(int32_t instruction) {
+    std::stringstream stream;
+    stream << std::hex << instruction;
+    return stream.str();
+}
+
+class illegal_instruction : public error_message {
+public:
+    explicit illegal_instruction(int32_t instruction, int32_t opcode) : error_message(
+            "Cannot execute illegal instruction" + hex_format(instruction) +
+            " with opcode " + hex_format(opcode) + ".") {}
 };

@@ -16,10 +16,6 @@ namespace Machine {
 
     [[nodiscard]] constexpr Direction operator!(Direction direction) noexcept;
 
-    enum State {
-        RUNNING, STOPPED, ILLEGAL_INSTRUCTION
-    };
-
     struct VM {
         Direction dir;
         int32_t pc;
@@ -31,7 +27,7 @@ namespace Machine {
         std::vector<int32_t> memory;
         std::vector<int32_t> stack;
 
-        State state;
+        int32_t running;
         size_t counter;
 
         const std::vector<int32_t> &program;

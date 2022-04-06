@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 0
     pushc 42
     arpushsub
@@ -6,4 +6,4 @@ _start:
     bury
     popc 42
     popc 0
-    halt
+    stop

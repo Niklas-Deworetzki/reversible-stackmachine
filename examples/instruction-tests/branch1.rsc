@@ -1,5 +1,6 @@
-_start:
-    branch t
+    start
+top:
+    branch bot
 
     nop
     nop
@@ -9,6 +10,6 @@ _start:
     nop
     nop
 
-t:
-    branch _start
-    halt
+bot:
+    branch top
+    stop

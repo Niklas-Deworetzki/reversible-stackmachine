@@ -1,8 +1,8 @@
-_start:
+    start
     pushfalse
     pushfalse
     arpushand
     popfalse
     popfalse
     popfalse
-    halt
+    stop

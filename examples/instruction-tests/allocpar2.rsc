@@ -1,3 +1,3 @@
-_start:
+    start
     allocpar 2
-    halt
+    stop

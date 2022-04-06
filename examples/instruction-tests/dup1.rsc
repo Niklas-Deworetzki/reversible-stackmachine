@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 32767
     dup
-    halt
+    stop

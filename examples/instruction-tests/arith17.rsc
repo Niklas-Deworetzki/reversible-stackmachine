@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 40
     pushc 2
     arpushadd
@@ -6,4 +6,4 @@ _start:
     bury
     popc 2
     popc 40
-    halt
+    stop

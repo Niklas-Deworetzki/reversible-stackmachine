@@ -1,8 +1,8 @@
 data:
 .word 0
 
-_start:
+    start
     pushc 42
     popm data
     pushm data
-    halt
+    stop

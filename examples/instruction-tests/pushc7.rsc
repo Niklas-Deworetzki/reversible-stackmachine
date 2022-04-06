@@ -1,3 +1,3 @@
-_start:
+    start
     pushc 0x7FFFFFFF
-    halt
+    stop

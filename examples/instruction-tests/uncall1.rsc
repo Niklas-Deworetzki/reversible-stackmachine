@@ -1,6 +1,12 @@
-_start:
+value:
+    .word 0
+
+    start
     pushc [t - @1]
     uncall
+    pushm value
+    undup
+    stop
 
     nop
     nop
@@ -8,7 +14,13 @@ _start:
     nop
     nop
 
-    halt
-    pushc -8
+top:
+    branch bot
 t:
     call
+    neg
+    pushm value
+    inc 10
+    popm value
+bot:
+    branch top

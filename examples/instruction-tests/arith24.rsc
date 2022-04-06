@@ -1,4 +1,4 @@
-_start:
+    start
     pushc 6
     pushc 0
     arpushdiv
@@ -6,4 +6,4 @@ _start:
 
     popc 0
     popc 6
-    halt
+    stop

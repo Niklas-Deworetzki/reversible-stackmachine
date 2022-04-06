@@ -1,5 +1,5 @@
-_start:
+    start
     pushc 1
     dup
     undup
-    halt
+    stop
