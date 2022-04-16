@@ -11,17 +11,19 @@ static void print_scanner_line(const char *name, uint32_t index, bool is_forward
 }
 
 int main() {
-    uint32_t index = 0;
+    uint32_t index = 0, generated_rules = 0;
     for (const auto &item: KNOWN_INSTRUCTIONS) {
         if (strcmp(item.fw_mnemonic, item.bw_mnemonic) == 0) {
             print_scanner_line(item.fw_mnemonic, index, true);
+            generated_rules++;
         } else {
             print_scanner_line(item.fw_mnemonic, index, true);
             print_scanner_line(item.bw_mnemonic, index, false);
+            generated_rules += 2;
         }
 
         index++;
     }
-    fprintf(stderr, "A total of %lu lexical rules have been generated\n",
-            sizeof(KNOWN_INSTRUCTIONS) / sizeof(*KNOWN_INSTRUCTIONS));
+    fprintf(stderr, "A total of %u lexical rules have been generated\n",
+            generated_rules);
 }
