@@ -95,10 +95,12 @@ namespace Machine {
 
         switch (dir == Forward ? opcode : INVERSE(opcode)) {
             case opcode_for("start"):
-                this->running += Direction::Forward;
+                if (this->running) throw std::logic_error("Executed 'start' instruction on machine already running. Please ensure that only one 'start' instruction is executed per program.");
+                else this->running = true;
                 break;
             case opcode_for("stop"):
-                this->running += Direction::Backward;
+                if (!this->running) throw std::logic_error("Executed 'stop' instruction on machine that is not running. Please ensure that only one 'stop' instruction is executed per program.");
+                else this->running = false;
                 break;
 
             case opcode_for("nop"):
@@ -408,7 +410,7 @@ namespace Machine {
            const int32_t pc) :
             dir(Forward), pc(pc), br(0), sp(0), fp(0),
             memory(memory_size), stack(stack_size),
-            running(0), counter(0), program(program) {
+            running(false), counter(0), program(program) {
         for (const auto &[address, value]: memory_layout) {
             memory.at(address) = value;
         }

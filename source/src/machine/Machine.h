@@ -27,7 +27,7 @@ namespace Machine {
         std::vector<int32_t> memory;
         std::vector<int32_t> stack;
 
-        int32_t running;
+        bool running;
         size_t counter;
 
         const std::vector<int32_t> &program;
