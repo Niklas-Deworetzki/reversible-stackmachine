@@ -3,8 +3,8 @@
 #include <stdexcept>
 #include <filesystem>
 
-#include "Syntax.h"
-#include "Instructions.h"
+#include "syntax.h"
+#include "instructions.h"
 #include "scanner.h"
 #include "messages/error.h"
 

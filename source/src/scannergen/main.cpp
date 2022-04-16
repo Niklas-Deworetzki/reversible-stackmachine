@@ -1,7 +1,7 @@
 
 #include <cstring>
 #include <cstdio>
-#include "syntax/Instructions.h"
+#include "syntax/instructions.h"
 
 static void print_scanner_line(const char *name, uint32_t index, bool is_forward) {
     printf("\"%s\"%*c{ return symbol_instruction(%3d, %5s ); }\n",

@@ -1,6 +1,6 @@
 
 #include <stdexcept>
-#include "Assembler.h"
+#include "assembler.h"
 #include "messages/error.h"
 
 namespace Assembler {

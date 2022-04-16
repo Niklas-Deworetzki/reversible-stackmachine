@@ -4,9 +4,9 @@
 #include <cmath>
 #include <cstring>
 #include <algorithm>
-#include "syntax/Syntax.h"
-#include "assembler/Assembler.h"
-#include "machine/Machine.h"
+#include "syntax/syntax.h"
+#include "assembler/assembler.h"
+#include "machine/machine.h"
 #include "entropy/entropy.h"
 
 #define VERSION_NUMBER "2.1"

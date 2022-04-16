@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 #include <optional>
-#include "syntax/Syntax.h"
+#include "syntax/syntax.h"
 #include "messages/error.h"
 
 namespace Assembler {

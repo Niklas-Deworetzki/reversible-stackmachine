@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <stack>
 #include <vector>
-#include "assembler/Assembler.h"
+#include "assembler/assembler.h"
 
 namespace Machine {
 

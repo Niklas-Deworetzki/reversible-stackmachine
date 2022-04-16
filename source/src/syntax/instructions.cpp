@@ -1,6 +1,6 @@
 
 #include <cstring>
-#include "Instructions.h"
+#include "instructions.h"
 
 static InstructionData *INVERSE_DATA = nullptr;
 static constexpr size_t INSTRUCTION_COUNT = sizeof(KNOWN_INSTRUCTIONS) / sizeof(*KNOWN_INSTRUCTIONS);

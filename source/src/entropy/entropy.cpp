@@ -2,9 +2,9 @@
 #include <bit>
 #include <cinttypes>
 #include <iostream>
-#include "assembler/Assembler.h"
+#include "assembler/assembler.h"
 #include "entropy.h"
-#include "machine/Machine.h"
+#include "machine/machine.h"
 
 namespace Entropy {
     template<unsigned int (entropy_generated_with_words)(int32_t, int32_t)>

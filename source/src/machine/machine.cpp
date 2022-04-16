@@ -1,8 +1,8 @@
 
 #include <bit>
 #include <stdexcept>
-#include "Machine.h"
-#include "syntax/Instructions.h"
+#include "machine.h"
+#include "syntax/instructions.h"
 
 #define CMPUSH(op) {                                                     \
     PUSHES_VALUES(1);                                                    \

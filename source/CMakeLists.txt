@@ -33,16 +33,16 @@ flex_target(SCANNER
         ${CMAKE_CURRENT_BINARY_DIR}/generated-sources/syntax/scanner.c)
 
 add_executable(scannergen
-        src/syntax/Syntax.h
+        src/syntax/syntax.h
         src/scannergen/main.cpp)
 
 add_executable(stackmachine
         ${BISON_PARSER_OUTPUTS}
         ${FLEX_SCANNER_OUTPUTS}
         main.cpp
-        src/machine/Machine.cpp
-        src/assembler/Assembler.cpp src/assembler/Eval.cpp src/assembler/Memory.cpp src/assembler/Symbols.cpp src/assembler/Translation.cpp
-        src/syntax/csyntax.c src/syntax/Syntax.cpp src/syntax/Instructions.cpp
+        src/machine/machine.cpp
+        src/assembler/assembler.cpp src/assembler/eval.cpp src/assembler/memory.cpp src/assembler/symbols.cpp src/assembler/translation.cpp
+        src/syntax/csyntax.c src/syntax/syntax.cpp src/syntax/instructions.cpp
         src/entropy/entropy.cpp)
 
 

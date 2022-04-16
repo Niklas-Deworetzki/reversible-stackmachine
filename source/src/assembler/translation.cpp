@@ -1,8 +1,8 @@
 
 #include <cstring>
 #include <iostream>
-#include "Assembler.h"
-#include "syntax/Instructions.h"
+#include "assembler.h"
+#include "syntax/instructions.h"
 
 namespace Assembler {
     using std::cerr, std::endl;

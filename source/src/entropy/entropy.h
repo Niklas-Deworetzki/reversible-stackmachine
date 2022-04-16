@@ -1,7 +1,7 @@
 #pragma once
 
-#include "assembler/Assembler.h"
-#include "machine/Machine.h"
+#include "assembler/assembler.h"
+#include "machine/machine.h"
 
 namespace Entropy {
 
