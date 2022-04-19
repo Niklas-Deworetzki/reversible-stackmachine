@@ -54,9 +54,12 @@ static void clear(int32_t &value, int32_t expected) {
 namespace Machine {
 
     static constexpr bool strequal(const char *a, const char *b) {
-        if (*a == '\0' && *b == '\0') return true;
-        if (*a == '\0' || *b == '\0') return false;
-        return *a == *b && strequal(a + 1, b + 1);
+        size_t index = 0;
+        do {
+            if (a[index] != b[index]) return false;
+            if (a[index] == '\0') return true;
+            index++;
+        } while (true);
     }
 
     static constexpr int32_t opcode_for(const char *mnemonic) {
