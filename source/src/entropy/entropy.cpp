@@ -7,10 +7,23 @@
 #include "machine/machine.h"
 
 namespace Entropy {
+
+    /**
+     * Core function used to compute entropy. Parameterized with a template-parameter
+     * representing the function used to determine the entropy difference between
+     * two words.
+     *
+     * This function will compare the memory of the machine with its original 
+     * memory layout as it was computed from the input program before execution.
+     * The words at every address in the memory layout are passed to the template
+     * parameter function. The same is done for every word on the stack and the
+     * stack pointer, if the stack pointer is not zero.
+     */
     template<unsigned int (entropy_generated_with_words)(int32_t, int32_t)>
     static unsigned long long count_entropy(const Assembler::MemoryLayout &original_memory,
                                             const Machine::VM &machine) {
         unsigned long long result = 0;
+        // Compare values in memory.
         for (int32_t address = 0; (unsigned) address < machine.memory.size(); address++) {
             if (original_memory.contains(address)) {
                 result += entropy_generated_with_words(machine.memory[address], original_memory.at(address));
@@ -18,6 +31,7 @@ namespace Entropy {
                 result += entropy_generated_with_words(machine.memory[address], 0);
             }
         }
+        // Compare values on stack.
         for (int32_t stack_address = 0; stack_address < machine.sp; stack_address++) {
             result += entropy_generated_with_words(machine.stack[stack_address], 0);
         }
@@ -60,4 +74,3 @@ namespace Entropy {
         std::cout << std::endl;
     }
 }
-

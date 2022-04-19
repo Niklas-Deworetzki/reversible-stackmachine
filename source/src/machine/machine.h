@@ -1,5 +1,8 @@
-
 #pragma once
+
+/**
+ * Interface for the virtual machine implementation.
+ */
 
 #include <cstdint>
 #include <stack>
@@ -10,10 +13,14 @@ namespace Machine {
 
     using Assembler::MemoryLayout;
 
-    enum Direction : int32_t {
-        Forward = 1, Backward = -1
+    enum Direction : int32_t /* Direction is stored as a machine word. */ {
+        Forward = 1, 
+        Backward = -1
     };
 
+    /**
+     * Negation operator for Direction inverts the direction.
+     */
     [[nodiscard]] constexpr Direction operator!(Direction direction) noexcept;
 
     struct VM {

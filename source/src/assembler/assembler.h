@@ -1,5 +1,16 @@
 #pragma once
 
+/**
+ * The assembler interface for the stack machine.
+ *
+ * Given an already parsed program, the main function defined in this
+ * module will return a memory layout, an assembled program encoding
+ * instructions as a collection of 32-bit words and an entry point for
+ * this program. Errors detected during assembly are reported as exceptions.
+ *
+ * @see std::tuple<MemoryLayout, std::vector<int32_t>, int32_t> assemble(Program &program)
+ */
+
 #include <map>
 #include <string>
 #include <optional>
@@ -67,5 +78,4 @@ namespace Assembler {
      * of instructions and the programs entry point.
      */
     [[nodiscard]] std::tuple<MemoryLayout, std::vector<int32_t>, int32_t> assemble(Program &program);
-
 }

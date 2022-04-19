@@ -1,3 +1,6 @@
+/**
+ * Initializes a MemoryLayout, placing all sections of a program in it.
+ */
 
 #include "assembler.h"
 
@@ -19,6 +22,7 @@ namespace Assembler {
                 }
 
                 case LINE_SET:
+                    // .set SYMBOL VALUE is already initialized in Symbol Table, doesn't appear in memory.
                     if (line.value.setValue.memoryAddress.variant != PRIMITIVE_SYMBOL) {
                         memory_layout[line.base_address] = eval(line.value.setValue.value,
                                                                 line.base_address, symbol_table);
@@ -35,6 +39,8 @@ namespace Assembler {
     void build_memory(const Program &program, const SymbolTable &symbol_table, MemoryLayout &memory_layout) {
         buildMemorySection(program.data, symbol_table, memory_layout);
         buildMemorySection(program.bss, symbol_table, memory_layout);
+        // program.code is not processed here, since it is stored
+        // in a separate program memory. (see translation.cpp)
     }
 }
 

@@ -1,3 +1,6 @@
+/**
+ * Implement evaluation of operands.
+ */
 
 #include "assembler.h"
 #include "messages/error.h"
@@ -8,6 +11,7 @@ namespace Assembler {
         if (operand.variant == PRIMITIVE_CONSTANT) {
             return operand.value.constant;
         }
+        // Symbols and relative operands cannot be evaluated here.
         throw invalid_operand("Restricted evaluation not possible.");
     }
 

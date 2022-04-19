@@ -1,3 +1,8 @@
+/**
+ * Performs symbol resolution on the input program, placing
+ * the values of symbols in a Symbol Table, reporting duplicates
+ * and reserving memory space for symbols.
+ */
 
 #include <stdexcept>
 #include "assembler.h"
@@ -8,17 +13,25 @@ namespace Assembler {
     constexpr int32_t DEFAULT_MEMORY_VALUE = 0;
 
     [[nodiscard]] static int32_t allocate_range(MemoryLayout &memory_layout, int32_t &base_address, size_t size) {
-        const auto castedSize = static_cast<int32_t>(size);
-        if (castedSize < 0 || (base_address + castedSize) < 0)
-            throw std::out_of_range("Requested memory cannot be allocated with current layout.");
+        bool collided;
+        int32_t castedSize;
 
-        // Check if range collides with any allocated address in memory layout.
-        for (int32_t address = base_address + castedSize - 1; address >= base_address; address--) {
-            if (memory_layout.contains(address)) {
-                base_address = address + 1;
-                return allocate_range(memory_layout, base_address, size);
+        do {
+            collided = false; // Begin a new search round.
+
+            castedSize = static_cast<int32_t>(size);
+            if (castedSize < 0 || (base_address + castedSize) < 0)
+                throw std::out_of_range("Requested memory cannot be allocated with current layout.");
+
+            // Check if range collides with any allocated address in memory layout.
+            for (int32_t address = base_address + castedSize - 1; address >= base_address; address--) {
+                if (memory_layout.contains(address)) {
+                    base_address = address + 1;
+                    collided = true;
+                    break; // Try again.
+                }
             }
-        }
+        } while (collided);
 
         // Reserve memory range in layout.
         for (int32_t address = base_address; address < base_address + castedSize; address++) {
@@ -28,7 +41,6 @@ namespace Assembler {
         // Move base_address for next allocation.
         int32_t result = base_address;
         base_address += castedSize;
-
         return result;
     }
 
@@ -49,6 +61,9 @@ namespace Assembler {
     }
 
 
+    /**
+     * Layout all Lines in a section with Line.variant == LINE_SET.
+     */
     static void layout_fixed(MemoryLayout &memory_layout, SymbolTable &symbol_table, Section &section) {
         iterate_section(section, [&](Line &line) {
             if (line.variant == LINE_SET && line.value.setValue.memoryAddress.variant != PRIMITIVE_SYMBOL) {
@@ -69,6 +84,10 @@ namespace Assembler {
         });
     }
 
+    /**
+     * Layout all Lines in a section with a Line.variant matching the given
+     * bitmask.
+     */
     static void layout_section(MemoryLayout &memory_layout, SymbolTable &symbol_table,
                                Section &section, int32_t &base_address,
                                const LineVariant allowed_mask) {
@@ -116,7 +135,7 @@ namespace Assembler {
         layout_section(memory_layout, symbol_table, program.bss, base_address,
                        LINE_RESERVED);
 
-        int instruction_count = 0;
+        int instruction_count = 0; // Create a fresh counter for instructions starting at 0.
         layout_section(memory_layout, symbol_table, program.code, instruction_count, LINE_INSTRUCTION);
 
         return symbol_table;

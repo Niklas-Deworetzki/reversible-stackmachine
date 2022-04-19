@@ -1,3 +1,9 @@
+/**
+ * Program entry point for an auxiliary executable. When run, this executable
+ * will generate lexical rules for every defined instruction, to be used in
+ * the machine's parser. Rules are generated for the forward and backward
+ * version of an instruction (unless they have the same mnemonic).
+ */
 
 #include <cstring>
 #include <cstdio>
@@ -24,6 +30,6 @@ int main() {
 
         index++;
     }
-    fprintf(stderr, "A total of %u lexical rules have been generated\n",
+    fprintf(stderr, "A total of %u lexical rules have been generated.\n",
             generated_rules);
 }

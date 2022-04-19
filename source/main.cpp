@@ -1,4 +1,13 @@
 
+/**
+ * Main entry point for stack machine executable.
+ * The executable generated with this entry point accepts a
+ * stack path to a stack machine assembly file as input,
+ * loads the input file, analyzes its contents and assembles
+ * a machine program. The assembled program is then executed
+ * in a virtual machine implementation.
+ */
+
 #include <iostream>
 #include <chrono>
 #include <cmath>
@@ -114,6 +123,7 @@ static bool parse_size(const char *arg, size_t &result) {
         continue;                                                                   \
     }                                                                               \
 
+
 int main(int argc, char *argv[]) {
     const char *input_file = nullptr;
     Entropy::Measure entropy_measure = Entropy::Measure::NONE;
@@ -139,14 +149,14 @@ int main(int argc, char *argv[]) {
             should_be_quiet = true;
 
         } else if (!path_separator && matches(current_arg, {"--stacksize", "-s"})) {
-            REQUIRES_ARGS(1)
+            REQUIRES_ARGS(1);
             i += 1;
             if (!parse_size(argv[i], stack_size)) {
                 cerr << "Invalid stack size: " << argv[i] << endl;
                 user_error = true;
             }
         } else if (!path_separator && matches(current_arg, {"--memorysize", "--memsize", "-m"})) {
-            REQUIRES_ARGS(1)
+            REQUIRES_ARGS(1);
             i += 1;
             if (!parse_size(argv[i], memory_size)) {
                 cerr << "Invalid memory size: " << argv[i] << endl;
