@@ -13,20 +13,25 @@
 #include <cmath>
 #include <cstring>
 #include <algorithm>
-#include "syntax/syntax.h"
 #include "assembler/assembler.h"
-#include "machine/machine.h"
 #include "entropy/entropy.h"
+#include "debug/debugger.h"
+#include "machine/machine.h"
+#include "syntax/syntax.h"
 
-#define VERSION_NUMBER "2.1"
+#define VERSION_NUMBER "2.2"
 static const char *version_string = "Stackmachine VM version " VERSION_NUMBER " (compiled " __DATE__ ")";
 
 static const char *help_page =
         "Supported options are:\n"
         " -h, --help\n"
-        "\tPrint this help page and exit.\n"
+        "    Print this help page and exit.\n"
         " -v, --version\n"
-        "\tPrint version information and exit.\n"
+        "    Print version information and exit.\n"
+        " -d, --debug\n"
+        "    Executes the input program using a debugger, allowing step-by-step\n"
+        "    execution, access to register values, access to memory and stack\n"
+        "    values, as well as breakpoints for a program."
         " -i, --information\n"
         "    Print runtime information like execution time, time required to load the\n"
         "    program and executed instructions per second.\n"
@@ -131,6 +136,7 @@ int main(int argc, char *argv[]) {
             should_display_version = false,
             should_display_info = false,
             should_be_quiet = false,
+            is_debugger_enabled = false,
             path_separator = false,
             user_error = false;
     size_t memory_size = 102400,
@@ -147,6 +153,8 @@ int main(int argc, char *argv[]) {
             should_display_info = true;
         } else if (!path_separator && matches(current_arg, {"--quiet", "-q"})) {
             should_be_quiet = true;
+        } else if (!path_separator && matches(current_arg, {"--debug", "-d"})) {
+            is_debugger_enabled = true;
 
         } else if (!path_separator && matches(current_arg, {"--stacksize", "-s"})) {
             REQUIRES_ARGS(1);
@@ -206,7 +214,8 @@ int main(int argc, char *argv[]) {
         const auto load_stop = std::chrono::high_resolution_clock::now();
 
         const auto exec_start = std::chrono::system_clock::now();
-        machine.run();
+        if (!is_debugger_enabled) machine.run();
+        else Machine::run_with_debugger(machine);
         const auto exec_stop = std::chrono::system_clock::now();
 
         if (should_display_info) {
