@@ -8,7 +8,7 @@ namespace Machine {
 
 
     struct debugger_state {
-        std::set<bool> breakpoints;
+        std::set<int32_t> breakpoints;
         uint32_t remaining_steps;
         bool continue_running;
         std::string last_input;
