@@ -40,6 +40,7 @@ namespace Machine {
             {"q",          debug_quit},
     };
 
+
     static continue_t debug_step(VM &, debugger_state &state, const std::vector<std::string> &args) {
         uint32_t steps = 1;
         if (args.size() >= 2) {
@@ -93,7 +94,7 @@ namespace Machine {
         } else {
             std::cout << "There are " << state.breakpoints.size() << " active breakpoints: " << std::endl;
             for (const auto &item : state.breakpoints) {
-                std::cout << " - " << item << std::endl;
+                std::cout << " at line " << item << std::endl;
             }
         }
         return PROMPT_USER;
@@ -155,6 +156,7 @@ namespace Machine {
         }
         return PROMPT_USER;
     }
+
 
     static continue_t debug_quit(VM &, debugger_state &state, const std::vector<std::string> &) {
         state.exit = true;
