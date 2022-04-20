@@ -16,10 +16,11 @@ namespace Machine {
         do {
             if (requires_user_interaction(vm, state)) {
                 interact_with_user(vm, state);
-                if (state.exit) {
+                if (state.exit) { // Check if user requested exit.
                     break;
                 }
             }
+
             vm.step();
             step_debugger_state(state);
         } while (vm.running);
