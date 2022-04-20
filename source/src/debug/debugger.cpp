@@ -109,8 +109,8 @@ namespace Machine {
 
                 command.clear();
                 split(input, command);
-                if (available_commands.contains(input)) {
-                    may_continue = available_commands[input](vm, state, command);
+                if (available_commands.contains(command[0])) {
+                    may_continue = available_commands[command[0]](vm, state, command);
                 }
             }
         } while (may_continue == PROMPT_USER && !state.exit);
