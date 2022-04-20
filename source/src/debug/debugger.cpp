@@ -4,6 +4,35 @@
 
 namespace Machine {
 
+    void print_machine_state(VM &vm) {
+        // dir = %s, pc = %d, br = %d, sp = %d, fp = %d
+        std::cout << "dir = " << (vm.dir == Direction::Forward ? "Forward" : "Backward")
+                  << " pc = " << vm.pc
+                  << " br = " << vm.br
+                  << " sp = " << vm.sp
+                  << " fp = " << vm.fp
+                  << std::endl;
+
+        std::cout << "Stack: ";
+
+        int32_t lower_bound;
+        if (vm.fp > 0) { // Print current stack frame.
+            lower_bound = vm.fp;
+        } else { // Print at most 10 elements of stack.
+            lower_bound = std::max(0, vm.sp - 10);
+        }
+
+        for (int32_t addr = vm.sp - 1; addr >= lower_bound; addr--) {
+            std::cout << vm.stack[addr] << " ";
+        }
+
+        if (lower_bound > 0) { // Indicate that not all elements have been printed.
+            std::cout << "...";
+        }
+
+        std::cout << std::endl;
+    }
+
     static bool requires_user_interaction(const VM &vm, const debugger_state &state);
 
     static void interact_with_user(VM &vm, debugger_state &state);
@@ -51,35 +80,6 @@ namespace Machine {
                 result_buffer.push_back(token);
             }
         }
-    }
-
-    static void print_machine_state(VM &vm) {
-        // dir = %s, pc = %d, br = %d, sp = %d, fp = %d
-        std::cout << "dir = " << (vm.dir == Direction::Forward ? "Forward" : "Backward")
-                  << " pc = " << vm.pc
-                  << " br = " << vm.br
-                  << " sp = " << vm.sp
-                  << " fp = " << vm.fp
-                  << std::endl;
-
-        std::cout << "Stack: ";
-
-        int32_t lower_bound;
-        if (vm.fp > 0) { // Print current stack frame.
-            lower_bound = vm.fp;
-        } else { // Print at most 10 elements of stack.
-            lower_bound = std::max(0, vm.sp - 10);
-        }
-
-        for (int32_t addr = vm.sp - 1; addr >= lower_bound; addr--) {
-            std::cout << vm.stack[addr] << " ";
-        }
-
-        if (lower_bound > 0) { // Indicate that not all elements have been printed.
-            std::cout << "...";
-        }
-
-        std::cout << std::endl;
     }
 
     static void interact_with_user(VM &vm, debugger_state &state) {

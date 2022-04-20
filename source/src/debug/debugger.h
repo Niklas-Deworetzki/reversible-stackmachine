@@ -6,6 +6,8 @@
 namespace Machine {
     void run_with_debugger(VM &vm);
 
+    void print_machine_state(VM &vm);
+
 
     struct debugger_state {
         std::set<int32_t> breakpoints;
