@@ -62,22 +62,20 @@ namespace Machine {
                   << " fp = " << vm.fp
                   << std::endl;
 
-        bool elements_hidden;
         std::cout << "Stack: ";
-        if (vm.fp > 0) {
-            for (int32_t addr = vm.sp - 1; addr >= vm.fp; addr--) {
-                std::cout << vm.stack[addr] << " ";
-            }
-            elements_hidden = true;
-        } else {
-            int32_t lower_bound = std::max(0, vm.sp - 10);
-            for (int32_t addr = vm.sp - 1; addr >= lower_bound; addr--) {
-                std::cout << vm.stack[addr] << " ";
-            }
-            elements_hidden = lower_bound != 0;
+
+        int32_t lower_bound;
+        if (vm.fp > 0) { // Print current stack frame.
+            lower_bound = vm.fp;
+        } else { // Print at most 10 elements of stack.
+            lower_bound = std::max(0, vm.sp - 10);
         }
 
-        if (elements_hidden) {
+        for (int32_t addr = vm.sp - 1; addr >= lower_bound; addr--) {
+            std::cout << vm.stack[addr] << " ";
+        }
+
+        if (lower_bound > 0) { // Indicate that not all elements have been printed.
             std::cout << "...";
         }
 
