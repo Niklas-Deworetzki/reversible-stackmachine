@@ -117,9 +117,9 @@ namespace Machine {
         } else if (string == "dir") {
             return reinterpret_cast<int32_t &>(vm.dir);
 
-        } else if (string == "S" || string == "M") {
+        } else if (string.starts_with("S[") || string.starts_with("M[")) {
             std::vector<int32_t> &memory_component =
-                    (string == "S") ? vm.stack : vm.memory;
+                    (string.starts_with('S')) ? vm.stack : vm.memory;
 
             const int32_t addr = std::stoi(string.substr(2, string.size() - 1));
             return memory_component.at(addr);
