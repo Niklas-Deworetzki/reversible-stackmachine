@@ -103,6 +103,8 @@ namespace Machine {
                     } else {
                         input = state.last_input;
                     }
+                } else {
+                    state.last_input = input;
                 }
 
                 command.clear();
