@@ -15,6 +15,9 @@ namespace Machine {
         debugger_state state;
         do {
             if (requires_user_interaction(vm, state)) {
+                // We aren't running anymore.
+                state.continue_running = false;
+
                 interact_with_user(vm, state);
                 if (state.exit) { // Check if user requested exit.
                     break;
