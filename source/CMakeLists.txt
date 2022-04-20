@@ -44,6 +44,6 @@ add_executable(stackmachine
         src/assembler/assembler.cpp src/assembler/eval.cpp src/assembler/memory.cpp src/assembler/symbols.cpp src/assembler/translation.cpp
         src/syntax/csyntax.c src/syntax/syntax.cpp src/syntax/instructions.cpp
         src/entropy/entropy.cpp 
-        src/debug/debugger.cpp)
+        src/debug/debugger.cpp src/debug/debug_commands.cpp)
 
 
