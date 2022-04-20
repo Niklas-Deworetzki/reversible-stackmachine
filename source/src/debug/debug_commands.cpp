@@ -4,6 +4,8 @@
 
 namespace Machine {
 
+    static continue_t debug_info(VM &vm, debugger_state &state, const std::vector<std::string> &args);
+
     static continue_t debug_step(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
     static continue_t debug_run(VM &vm, debugger_state &state, const std::vector<std::string> &args);
@@ -21,6 +23,7 @@ namespace Machine {
     static continue_t debug_quit(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
     std::map<std::string, debugger_command> available_commands = {
+            {"info",       debug_info},
             {"step",       debug_step},
             {"s",          debug_step},
             {"run",        debug_run},
@@ -39,6 +42,12 @@ namespace Machine {
             {"quit",       debug_quit},
             {"q",          debug_quit},
     };
+
+
+    static continue_t debug_info(VM &vm, debugger_state &, const std::vector<std::string> &) {
+        print_machine_state(vm);
+        return PROMPT_USER;
+    }
 
 
     static continue_t debug_step(VM &, debugger_state &state, const std::vector<std::string> &args) {
@@ -93,7 +102,7 @@ namespace Machine {
             std::cout << "No breakpoints set." << std::endl;
         } else {
             std::cout << "There are " << state.breakpoints.size() << " active breakpoints: " << std::endl;
-            for (const auto &item : state.breakpoints) {
+            for (const auto &item: state.breakpoints) {
                 std::cout << " at line " << item << std::endl;
             }
         }
