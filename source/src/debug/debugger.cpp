@@ -5,12 +5,14 @@
 namespace Machine {
 
     void print_machine_state(VM &vm) {
+        const std::string counter_digits = std::to_string(vm.counter);
         // dir = %s, pc = %d, br = %d, sp = %d, fp = %d
-        std::cout << "dir = " << (vm.dir == Direction::Forward ? "Forward" : "Backward")
-                  << " pc = " << vm.pc
-                  << " br = " << vm.br
-                  << " sp = " << vm.sp
-                  << " fp = " << vm.fp
+        std::cout << "[" << std::string(std::max(0ul, 3 - counter_digits.size()), ' ') << counter_digits << "]"
+                  << " dir = " << (vm.dir == Direction::Forward ? "Forward" : "Backward")
+                  << ", pc = " << vm.pc
+                  << ", br = " << vm.br
+                  << ", sp = " << vm.sp
+                  << ", fp = " << vm.fp
                   << std::endl;
 
         std::cout << "Stack: ";
