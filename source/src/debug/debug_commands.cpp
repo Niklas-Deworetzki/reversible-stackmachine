@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include "machine/machine.h"
 #include "debugger.h"
 
 namespace Machine {

@@ -76,10 +76,6 @@ namespace Machine {
 
     using std::swap;
 
-    [[nodiscard]] constexpr Direction operator!(const Direction direction) noexcept {
-        return direction == Forward ? Backward : Forward;
-    }
-
     static constexpr int32_t True = Backward;
     static constexpr int32_t False = Forward;
 
