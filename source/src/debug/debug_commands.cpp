@@ -52,8 +52,8 @@ namespace Machine {
     }
 
 
-    static continue_t debug_step(VM &, debugger_state &state, const std::vector<std::string> &args) {
-        uint32_t steps = 1;
+    static continue_t debug_step(VM &vm, debugger_state &state, const std::vector<std::string> &args) {
+        int32_t steps = 1;
         if (args.size() >= 2) {
             try {
                 steps = std::stoi(args[1]);
@@ -61,7 +61,14 @@ namespace Machine {
                 std::cout << "`" << args[1] << "' is not a valid number: " << exception.what() << std::endl;
             }
         }
-        state.remaining_steps = steps;
+
+        if (steps < 0) {
+            vm.dir = !vm.dir;
+            state.remaining_steps = static_cast<uint32_t>(-steps);
+        } else {
+            state.remaining_steps = static_cast<uint32_t>(steps);
+        }
+
         return CONTINUE_EXECUTION;
     }
 
