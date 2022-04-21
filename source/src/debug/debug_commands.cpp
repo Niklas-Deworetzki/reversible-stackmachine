@@ -122,9 +122,6 @@ namespace Machine {
         } else if (string == "pc") {
             return vm.pc;
 
-        } else if (string == "dir") {
-            return reinterpret_cast<int32_t &>(vm.dir);
-
         } else if (string.starts_with("S[") || string.starts_with("M[")) {
             std::vector<int32_t> &memory_component =
                     (string.starts_with('S')) ? vm.stack : vm.memory;
