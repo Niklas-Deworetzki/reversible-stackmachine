@@ -31,7 +31,7 @@ static const char *help_page =
         " -d, --debug\n"
         "    Executes the input program using a debugger, allowing step-by-step\n"
         "    execution, access to register values, access to memory and stack\n"
-        "    values, as well as breakpoints for a program."
+        "    values, as well as breakpoints for a program.\n"
         " -i, --information\n"
         "    Print runtime information like execution time, time required to load the\n"
         "    program and executed instructions per second.\n"
