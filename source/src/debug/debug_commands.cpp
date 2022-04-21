@@ -22,6 +22,8 @@ namespace Machine {
 
     static continue_t debug_quit(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
+    static continue_t debug_invert(VM &vm, debugger_state &state, const std::vector<std::string> &args);
+
     std::map<std::string, debugger_command> available_commands = {
             {"info",       debug_info},
             {"step",       debug_step},
@@ -40,6 +42,7 @@ namespace Machine {
             {"set",        debug_set},
             {"quit",       debug_quit},
             {"q",          debug_quit},
+            {"invert",     debug_invert},
     };
 
 
@@ -166,5 +169,11 @@ namespace Machine {
     static continue_t debug_quit(VM &, debugger_state &state, const std::vector<std::string> &) {
         state.exit = true;
         return CONTINUE_EXECUTION;
+    }
+
+
+    static continue_t debug_invert(VM &vm, debugger_state &, const std::vector<std::string> &) {
+        vm.dir = !vm.dir;
+        return PROMPT_USER;
     }
 }
