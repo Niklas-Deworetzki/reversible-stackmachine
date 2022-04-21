@@ -182,6 +182,8 @@ namespace Machine {
 
     static continue_t debug_invert(VM &vm, debugger_state &, const std::vector<std::string> &) {
         vm.dir = !vm.dir;
+        std::cout << "Direction is now " << ((vm.dir == Direction::Forward) ? "Forward" : "Backward") << "."
+                  << std::endl;
         return PROMPT_USER;
     }
 }
