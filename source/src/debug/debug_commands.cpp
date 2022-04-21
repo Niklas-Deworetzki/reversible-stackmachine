@@ -47,6 +47,11 @@ namespace Machine {
     };
 
 
+    static void invert_vm_direction(VM &vm) {
+        vm.dir = !vm.dir;
+        vm.step_pc();
+    }
+
     static continue_t debug_info(VM &vm, debugger_state &, const std::vector<std::string> &) {
         print_machine_state(vm);
         return PROMPT_USER;
@@ -64,7 +69,7 @@ namespace Machine {
         }
 
         if (steps < 0) {
-            vm.dir = !vm.dir;
+            invert_vm_direction(vm);
             state.remaining_steps = static_cast<uint32_t>(-steps);
         } else {
             state.remaining_steps = static_cast<uint32_t>(steps);
@@ -181,7 +186,7 @@ namespace Machine {
 
 
     static continue_t debug_invert(VM &vm, debugger_state &, const std::vector<std::string> &) {
-        vm.dir = !vm.dir;
+        invert_vm_direction(vm);
         std::cout << "Direction is now " << ((vm.dir == Direction::Forward) ? "Forward" : "Backward") << "."
                   << std::endl;
         return PROMPT_USER;

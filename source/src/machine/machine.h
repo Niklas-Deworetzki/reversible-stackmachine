@@ -51,7 +51,6 @@ namespace Machine {
 
         void run();
 
-    private:
         void step_pc();
 
         void step_instr();
