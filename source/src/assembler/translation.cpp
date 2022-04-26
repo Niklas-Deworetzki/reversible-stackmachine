@@ -65,6 +65,9 @@ namespace Assembler {
             result.push_back(opcode | operand);
         });
 
+        if (!contains_start) throw start_stop_presence("start");
+        if (!contains_stop) throw start_stop_presence("stop");
+
         return {result, entry_address};
     }
 }

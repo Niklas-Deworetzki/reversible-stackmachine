@@ -21,7 +21,9 @@ namespace Machine {
     /**
      * Negation operator for Direction inverts the direction.
      */
-    [[nodiscard]] constexpr Direction operator!(Direction direction) noexcept;
+    [[nodiscard]] inline constexpr Direction operator!(const Direction direction) noexcept {
+        return direction == Forward ? Backward : Forward;
+    }
 
     struct VM {
         Direction dir;
@@ -49,7 +51,6 @@ namespace Machine {
 
         void run();
 
-    private:
         void step_pc();
 
         void step_instr();
