@@ -25,25 +25,27 @@ namespace Machine {
 
     static continue_t debug_invert(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
-    std::map<std::string, debugger_command> available_commands = {
-            {"info",       debug_info},
-            {"step",       debug_step},
-            {"s",          debug_step},
-            {"run",        debug_run},
-            {"r",          debug_run},
-            {"continue",   debug_run},
-            {"c",          debug_run},
-            {"breakpoint", debug_breakpoint_create},
-            {"break",      debug_breakpoint_create},
-            {"b",          debug_breakpoint_create},
-            {"clear",      debug_breakpoint_clear},
-            {"list",       debug_breakpoint_list},
-            {"inspect",    debug_inspect},
-            {"i",          debug_inspect},
-            {"set",        debug_set},
-            {"quit",       debug_quit},
-            {"q",          debug_quit},
-            {"invert",     debug_invert},
+    const std::vector<debugger_command> available_commands = {
+            {debug_info,              "info",       "Shows information about the machine state.",
+                    {}},
+            {debug_step,              "step",       "Execute the next instruction.",
+                    {"s"}},
+            {debug_run,               "run",        "Execute instructions until a breakpoint is hit or the program terminates",
+                    {"r",     "continue", "c"}},
+            {debug_breakpoint_create, "breakpoint", "Create a breakpoint at the given instruction.",
+                    {"break", "b"}},
+            {debug_breakpoint_clear,  "clear",      "Clears a breakpoint at the given instruction.",
+                    {}},
+            {debug_breakpoint_list,   "list",       "List all created breakpoints.",
+                    {}},
+            {debug_inspect,           "inspect",    "Inspect the value of a machine component.",
+                    {"i"}},
+            {debug_set,               "set",        "Set the value of a machine component.",
+                    {}},
+            {debug_invert,            "invert",     "Inverts the execution direction of the machine.",
+                    {}},
+            {debug_quit,              "quit",       "Exits the debugger, terminating the program.",
+                    {"q"}}
     };
 
 

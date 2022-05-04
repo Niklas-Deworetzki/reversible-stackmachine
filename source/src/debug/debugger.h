@@ -28,10 +28,16 @@ namespace Machine {
         CONTINUE_EXECUTION
     };
 
-    typedef continue_t (*debugger_command)(VM &, debugger_state &, const std::vector<std::string> &);
+    typedef continue_t (*debugger_function)(VM &, debugger_state &, const std::vector<std::string> &);
 
+    struct debugger_command {
+        const debugger_function implementation;
+        const std::string name;
+        const std::string description;
+        const std::vector<std::string> aliases;
+    };
 
-    extern std::map<std::string, debugger_command> available_commands;
+    extern const std::vector<debugger_command> available_commands;
 
 }
 
