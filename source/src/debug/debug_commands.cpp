@@ -21,29 +21,35 @@ namespace Machine {
 
     static continue_t debug_set(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
-    static continue_t debug_quit(VM &vm, debugger_state &state, const std::vector<std::string> &args);
-
     static continue_t debug_invert(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
-    std::map<std::string, debugger_command> available_commands = {
-            {"info",       debug_info},
-            {"step",       debug_step},
-            {"s",          debug_step},
-            {"run",        debug_run},
-            {"r",          debug_run},
-            {"continue",   debug_run},
-            {"c",          debug_run},
-            {"breakpoint", debug_breakpoint_create},
-            {"break",      debug_breakpoint_create},
-            {"b",          debug_breakpoint_create},
-            {"clear",      debug_breakpoint_clear},
-            {"list",       debug_breakpoint_list},
-            {"inspect",    debug_inspect},
-            {"i",          debug_inspect},
-            {"set",        debug_set},
-            {"quit",       debug_quit},
-            {"q",          debug_quit},
-            {"invert",     debug_invert},
+    static continue_t debug_quit(VM &vm, debugger_state &state, const std::vector<std::string> &args);
+
+    static continue_t debug_help(VM &vm, debugger_state &state, const std::vector<std::string> &args);
+
+    const std::vector<debugger_command> available_commands = {
+            {debug_info,              "info",       "Shows information about the machine state.",
+                    {}},
+            {debug_step,              "step",       "Execute the next instruction.",
+                    {"s"}},
+            {debug_run,               "run",        "Execute instructions until a breakpoint is hit or the program terminates",
+                    {"r",     "continue", "c"}},
+            {debug_breakpoint_create, "breakpoint", "Create a breakpoint at the given instruction.",
+                    {"break", "b"}},
+            {debug_breakpoint_clear,  "clear",      "Clears a breakpoint at the given instruction.",
+                    {}},
+            {debug_breakpoint_list,   "list",       "List all created breakpoints.",
+                    {}},
+            {debug_inspect,           "inspect",    "Inspect the value of a machine component.",
+                    {"i"}},
+            {debug_set,               "set",        "Set the value of a machine component.",
+                    {}},
+            {debug_invert,            "invert",     "Inverts the execution direction of the machine.",
+                    {}},
+            {debug_quit,              "quit",       "Exits the debugger, terminating the program.",
+                    {"q"}},
+            {debug_help,              "help",       "Display an overview of available commands.",
+                    {}}
     };
 
 
@@ -51,6 +57,7 @@ namespace Machine {
         vm.dir = !vm.dir;
         vm.step_pc();
     }
+
 
     static continue_t debug_info(VM &vm, debugger_state &, const std::vector<std::string> &) {
         print_machine_state(vm);
@@ -125,7 +132,7 @@ namespace Machine {
     }
 
 
-    static int32_t &component_from_string(const std::string &string, VM &vm) {
+    static const int32_t &component_from_string(const std::string &string, VM &vm, bool is_write_access = false) {
         if (string == "sp") {
             return vm.sp;
 
@@ -138,12 +145,22 @@ namespace Machine {
         } else if (string == "pc") {
             return vm.pc;
 
-        } else if (string.starts_with("S[") || string.starts_with("M[")) {
-            std::vector<int32_t> &memory_component =
-                    (string.starts_with('S')) ? vm.stack : vm.memory;
-
+        } else if (string.starts_with("S[") || string.starts_with("M[") || string.starts_with("P[")) {
             const int32_t addr = std::stoi(string.substr(2, string.size() - 1));
-            return memory_component.at(addr);
+            switch (string[0]) {
+                case 'S':
+                    return vm.memory[addr];
+
+                case 'M':
+                    return vm.stack[addr];
+
+                case 'P':
+                    if (is_write_access) {
+                        throw std::invalid_argument("Writing to program memory is not allowed!");
+                    }
+                    return vm.program[addr];
+
+            }
         }
 
         throw std::invalid_argument(std::string("Specifier `") + string + "' does not describe a machine component.");
@@ -168,7 +185,7 @@ namespace Machine {
     static continue_t debug_set(VM &vm, debugger_state &, const std::vector<std::string> &args) {
         for (size_t index = 1; index + 1 < args.size(); index += 2) {
             try {
-                int32_t &component = component_from_string(args[index], vm);
+                auto &component = const_cast<int32_t &>(component_from_string(args[index], vm, true));
                 component = std::stoi(args[index + 1]);
                 std::cout << " " << args[index] << " = " << component << std::endl;
             } catch (std::exception &exception) {
@@ -179,16 +196,24 @@ namespace Machine {
     }
 
 
+    static continue_t debug_invert(VM &vm, debugger_state &, const std::vector<std::string> &) {
+        invert_vm_direction(vm);
+        std::cout << "Direction is now " << ((vm.dir == Direction::Forward) ? "Forward" : "Backward") << "."
+                  << std::endl;
+        return PROMPT_USER;
+    }
+
+
     static continue_t debug_quit(VM &, debugger_state &state, const std::vector<std::string> &) {
         state.exit = true;
         return CONTINUE_EXECUTION;
     }
 
 
-    static continue_t debug_invert(VM &vm, debugger_state &, const std::vector<std::string> &) {
-        invert_vm_direction(vm);
-        std::cout << "Direction is now " << ((vm.dir == Direction::Forward) ? "Forward" : "Backward") << "."
-                  << std::endl;
+    static continue_t debug_help(VM &, debugger_state &, const std::vector<std::string> &) {
+        for (const auto &command: available_commands) {
+            printf("%-10s - %s\n", command.name.c_str(), command.description.c_str());
+        }
         return PROMPT_USER;
     }
 }

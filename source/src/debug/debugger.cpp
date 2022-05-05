@@ -84,6 +84,16 @@ namespace Machine {
         }
     }
 
+    static std::optional<debugger_command> find_command(const std::string &command_name) {
+        for (const auto &command: available_commands) {
+            if (command.name == command_name) return command;
+            for (const auto &alias: command.aliases) {
+                if (alias == command_name) return command;
+            }
+        }
+        return {};
+    }
+
     static void interact_with_user(VM &vm, debugger_state &state) {
         std::string input;
         std::vector<std::string> command;
@@ -109,10 +119,12 @@ namespace Machine {
                     state.last_input = input;
                 }
 
-                command.clear();
+                command.clear(); // Reset command buffer.
                 split(input, command);
-                if (available_commands.contains(command[0])) {
-                    may_continue = available_commands[command[0]](vm, state, command);
+
+                std::optional<debugger_command> executed_command = find_command(command[0]);
+                if (executed_command.has_value()) {
+                    may_continue = executed_command.value().implementation(vm, state, command);
                 }
             }
         } while (may_continue == PROMPT_USER && !state.exit);
