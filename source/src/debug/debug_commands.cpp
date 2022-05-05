@@ -21,9 +21,11 @@ namespace Machine {
 
     static continue_t debug_set(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
+    static continue_t debug_invert(VM &vm, debugger_state &state, const std::vector<std::string> &args);
+
     static continue_t debug_quit(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
-    static continue_t debug_invert(VM &vm, debugger_state &state, const std::vector<std::string> &args);
+    static continue_t debug_help(VM &vm, debugger_state &state, const std::vector<std::string> &args);
 
     const std::vector<debugger_command> available_commands = {
             {debug_info,              "info",       "Shows information about the machine state.",
@@ -45,7 +47,9 @@ namespace Machine {
             {debug_invert,            "invert",     "Inverts the execution direction of the machine.",
                     {}},
             {debug_quit,              "quit",       "Exits the debugger, terminating the program.",
-                    {"q"}}
+                    {"q"}},
+            {debug_help,              "help",       "Display an overview of available commands.",
+                    {}}
     };
 
 
@@ -53,6 +57,7 @@ namespace Machine {
         vm.dir = !vm.dir;
         vm.step_pc();
     }
+
 
     static continue_t debug_info(VM &vm, debugger_state &, const std::vector<std::string> &) {
         print_machine_state(vm);
@@ -191,16 +196,24 @@ namespace Machine {
     }
 
 
+    static continue_t debug_invert(VM &vm, debugger_state &, const std::vector<std::string> &) {
+        invert_vm_direction(vm);
+        std::cout << "Direction is now " << ((vm.dir == Direction::Forward) ? "Forward" : "Backward") << "."
+                  << std::endl;
+        return PROMPT_USER;
+    }
+
+
     static continue_t debug_quit(VM &, debugger_state &state, const std::vector<std::string> &) {
         state.exit = true;
         return CONTINUE_EXECUTION;
     }
 
 
-    static continue_t debug_invert(VM &vm, debugger_state &, const std::vector<std::string> &) {
-        invert_vm_direction(vm);
-        std::cout << "Direction is now " << ((vm.dir == Direction::Forward) ? "Forward" : "Backward") << "."
-                  << std::endl;
+    static continue_t debug_help(VM &, debugger_state &, const std::vector<std::string> &) {
+        for (const auto &command: available_commands) {
+            printf("%-10s - %s\n", command.name.c_str(), command.description.c_str());
+        }
         return PROMPT_USER;
     }
 }
