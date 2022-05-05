@@ -127,7 +127,7 @@ namespace Machine {
     }
 
 
-    static int32_t &component_from_string(const std::string &string, VM &vm) {
+    static const int32_t &component_from_string(const std::string &string, VM &vm, bool is_write_access = false) {
         if (string == "sp") {
             return vm.sp;
 
@@ -140,12 +140,22 @@ namespace Machine {
         } else if (string == "pc") {
             return vm.pc;
 
-        } else if (string.starts_with("S[") || string.starts_with("M[")) {
-            std::vector<int32_t> &memory_component =
-                    (string.starts_with('S')) ? vm.stack : vm.memory;
-
+        } else if (string.starts_with("S[") || string.starts_with("M[") || string.starts_with("P[")) {
             const int32_t addr = std::stoi(string.substr(2, string.size() - 1));
-            return memory_component.at(addr);
+            switch (string[0]) {
+                case 'S':
+                    return vm.memory[addr];
+
+                case 'M':
+                    return vm.stack[addr];
+
+                case 'P':
+                    if (is_write_access) {
+                        throw std::invalid_argument("Writing to program memory is not allowed!");
+                    }
+                    return vm.program[addr];
+
+            }
         }
 
         throw std::invalid_argument(std::string("Specifier `") + string + "' does not describe a machine component.");
@@ -170,7 +180,7 @@ namespace Machine {
     static continue_t debug_set(VM &vm, debugger_state &, const std::vector<std::string> &args) {
         for (size_t index = 1; index + 1 < args.size(); index += 2) {
             try {
-                int32_t &component = component_from_string(args[index], vm);
+                auto &component = const_cast<int32_t &>(component_from_string(args[index], vm, true));
                 component = std::stoi(args[index + 1]);
                 std::cout << " " << args[index] << " = " << component << std::endl;
             } catch (std::exception &exception) {
