@@ -5,9 +5,13 @@
 namespace Machine {
 
     void print_machine_state(VM &vm) {
-        const std::string counter_digits = std::to_string(vm.counter);
+        std::string counter_digits = std::to_string(vm.counter);
+        if (counter_digits.size() < 3) {
+            counter_digits = std::string(3 - counter_digits.size(), ' ') + counter_digits;
+        }
+
         // dir = %s, pc = %d, br = %d, sp = %d, fp = %d
-        std::cout << "[" << std::string(std::max(0ul, 3 - counter_digits.size()), ' ') << counter_digits << "]"
+        std::cout << "[" << counter_digits << "]"
                   << " dir = " << (vm.dir == Direction::Forward ? "Forward" : "Backward")
                   << ", pc = " << vm.pc
                   << ", br = " << vm.br
