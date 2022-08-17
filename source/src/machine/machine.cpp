@@ -32,6 +32,7 @@
 #define clear(value, expected) value ^= expected
 #define REQUIRES_PARAMS(n)
 #define PUSHES_VALUES(n)
+#define REQUIRES_LOCAL(n)
 #define ASSERT_POSITIVE(n)
 
 #else
@@ -47,6 +48,7 @@ static void clear(int32_t &value, int32_t expected) {
 
 #define REQUIRES_PARAMS(n) if (sp < (n)) throw std::underflow_error("Stack underflow. Not enough elements on the stack.")
 #define PUSHES_VALUES(n) if (stack.capacity() - sp <= static_cast<size_t>(n)) throw std::overflow_error("Stack overflow. Capacity exceeded.")
+#define REQUIRES_LOCAL(n) if (fp + (n) < 0 || fp + (n) >= sp) throw std::out_of_range("Access relative to frame pointer violates stack bounds.")
 #define ASSERT_POSITIVE(n) if ((n) < 0) throw std::invalid_argument("Negative operands are not supported for stack allocation instructions.")
 
 #endif
@@ -189,11 +191,13 @@ namespace Machine {
 
             case opcode_for("pushl"):
                 PUSHES_VALUES(1);
+                REQUIRES_LOCAL(operand);
                 swap(stack[sp], stack.at(fp + operand));
                 sp += 1;
                 break;
             case opcode_for("popl"):
                 REQUIRES_PARAMS(1);
+                REQUIRES_LOCAL(operand);
                 sp -= 1;
                 swap(stack[sp], stack.at(fp + operand));
                 clear(stack[sp], 0);
