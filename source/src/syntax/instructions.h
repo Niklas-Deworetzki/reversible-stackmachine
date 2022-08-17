@@ -69,7 +69,10 @@ constexpr int32_t SIGN_EXTEND_MASK = ~OPCODE_WIDTH_MASK;
  */
 [[nodiscard]] static constexpr int32_t operand_high_value(int32_t operand) noexcept {
     int32_t higher_bits = OPERAND_WIDTH_MASK & (operand >> (OPERAND_WIDTH - 1));
-    if (operand < 0) higher_bits = OPCODE_WIDTH_MASK & ~higher_bits; // invert, since it is xor-ed on the sign extension.
+    if (operand < 0) {
+        // invert, since it is xor-ed on the sign extension.
+        higher_bits = OPCODE_WIDTH_MASK & ~higher_bits;
+    }
     return higher_bits;
 }
 
