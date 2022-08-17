@@ -374,7 +374,7 @@ namespace Machine {
             case opcode_for("memswap"):
             case INVERSE(opcode_for("memswap")):
                 REQUIRES_PARAMS(2);
-                swap(memory.at(stack[sp - 1]), memory.at(stack[sp - 2]));
+                swap(memory.at(stack[sp - 1] + operand), memory.at(stack[sp - 2] + operand));
                 break;
 
             case opcode_for("xorhc"):

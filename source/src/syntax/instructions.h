@@ -166,7 +166,7 @@ constexpr InstructionData KNOWN_INSTRUCTIONS[] = {
 
         {"pushm",     "popm",       OperandMode::ABSOLUTE,   32},
         {"load",      "store",      OperandMode::ABSOLUTE,   33},
-        {"memswap",   "memswap",    OperandMode::NO_OPERAND, 34},
+        {"memswap",   "memswap",    OperandMode::ABSOLUTE,   34},
 
         {"xorhc",     "xorhc",      OperandMode::UPPER,      35},
 };
