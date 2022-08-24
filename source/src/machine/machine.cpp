@@ -29,7 +29,7 @@
 
 #ifdef UNSAFE_OPERATIONS
 
-#define clear(value, expected) value ^= expected
+#define clear(value, expected) value ^= expected;
 #define REQUIRES_PARAMS(n)
 #define PUSHES_VALUES(n)
 #define REQUIRES_LOCAL(n)
@@ -109,38 +109,38 @@ namespace Machine {
                 break;
 
             case opcode_for("pushc"):
-                PUSHES_VALUES(1);
+                PUSHES_VALUES(1)
                 stack[sp] = operand;
                 sp += 1;
                 break;
 
             case opcode_for("popc"):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 sp -= 1;
                 clear(stack[sp], operand);
                 break;
 
             case opcode_for("dup"):
-                PUSHES_VALUES(1);
-                REQUIRES_PARAMS(1);
+                PUSHES_VALUES(1)
+                REQUIRES_PARAMS(1)
                 stack[sp] = stack[sp - 1];
                 sp += 1;
                 break;
 
             case opcode_for("undup"):
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 sp -= 1;
                 clear(stack[sp], stack[sp - 1]);
                 break;
 
             case opcode_for("swap"):
             case INVERSE(opcode_for("swap")):
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 swap(stack[sp - 1], stack[sp - 2]);
                 break;
 
             case opcode_for("bury"): {
-                REQUIRES_PARAMS(3);
+                REQUIRES_PARAMS(3)
                 int32_t sp1(stack[sp - 1]), sp2(stack[sp - 2]), sp3(stack[sp - 3]);
                 stack[sp - 3] = sp1;
                 stack[sp - 2] = sp3;
@@ -148,7 +148,7 @@ namespace Machine {
                 break;
             }
             case opcode_for("dig"): {
-                REQUIRES_PARAMS(3);
+                REQUIRES_PARAMS(3)
                 int32_t sp1(stack[sp - 1]), sp2(stack[sp - 2]), sp3(stack[sp - 3]);
                 stack[sp - 1] = sp3;
                 stack[sp - 2] = sp1;
@@ -157,13 +157,13 @@ namespace Machine {
             }
 
             case opcode_for("allocpar"):
-                ASSERT_POSITIVE(operand);
-                PUSHES_VALUES(operand);
+                ASSERT_POSITIVE(operand)
+                PUSHES_VALUES(operand)
                 sp += operand;
                 break;
             case opcode_for("releasepar"):
-                ASSERT_POSITIVE(operand);
-                REQUIRES_PARAMS(operand);
+                ASSERT_POSITIVE(operand)
+                REQUIRES_PARAMS(operand)
                 for (int i = 1; i <= operand; ++i) {
                     clear(stack[sp - i], 0);
                 }
@@ -171,15 +171,15 @@ namespace Machine {
                 break;
 
             case opcode_for("asf"):
-                ASSERT_POSITIVE(operand);
-                PUSHES_VALUES(operand + 1);
+                ASSERT_POSITIVE(operand)
+                PUSHES_VALUES(operand + 1)
                 stack[sp] = fp;
                 fp = sp;
                 sp += operand + 1;
                 break;
             case opcode_for("rsf"):
-                ASSERT_POSITIVE(operand);
-                REQUIRES_PARAMS(operand + 1);
+                ASSERT_POSITIVE(operand)
+                REQUIRES_PARAMS(operand + 1)
                 for (int i = 1; i <= operand; ++i) {
                     clear(stack[sp - i], 0);
                 }
@@ -190,14 +190,14 @@ namespace Machine {
                 break;
 
             case opcode_for("pushl"):
-                PUSHES_VALUES(1);
-                REQUIRES_LOCAL(operand);
+                PUSHES_VALUES(1)
+                REQUIRES_LOCAL(operand)
                 swap(stack[sp], stack.at(fp + operand));
                 sp += 1;
                 break;
             case opcode_for("popl"):
-                REQUIRES_PARAMS(1);
-                REQUIRES_LOCAL(operand);
+                REQUIRES_PARAMS(1)
+                REQUIRES_LOCAL(operand)
                 sp -= 1;
                 swap(stack[sp], stack.at(fp + operand));
                 clear(stack[sp], 0);
@@ -205,13 +205,13 @@ namespace Machine {
 
             case opcode_for("call"):
             case INVERSE(opcode_for("call")):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 swap(br, stack[sp - 1]);
                 break;
 
             case opcode_for("uncall"):
             case INVERSE(opcode_for("uncall")):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 br = -br;
                 stack[sp - 1] = -stack[sp - 1];
                 swap(br, stack[sp - 1]);
@@ -225,7 +225,7 @@ namespace Machine {
 
             case opcode_for("brt"):
             case INVERSE(opcode_for("brt")):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 if (stack[sp - 1] == True) {
                     br += dir * operand;
                 }
@@ -233,30 +233,30 @@ namespace Machine {
 
             case opcode_for("brf"):
             case INVERSE(opcode_for("brf")):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 if (stack[sp - 1] == False) {
                     br += dir * operand;
                 }
                 break;
 
             case opcode_for("pushtrue"):
-                PUSHES_VALUES(1);
+                PUSHES_VALUES(1)
                 stack[sp] = True;
                 sp += 1;
                 break;
             case opcode_for("poptrue"):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 sp -= 1;
                 clear(stack[sp], True);
                 break;
 
             case opcode_for("pushfalse"):
-                PUSHES_VALUES(1);
+                PUSHES_VALUES(1)
                 stack[sp] = False;
                 sp += 1;
                 break;
             case opcode_for("popfalse"):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 sp -= 1;
                 clear(stack[sp], False);
                 break;
@@ -279,42 +279,42 @@ namespace Machine {
                 break;
 
             case opcode_for("inc"):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 stack[sp - 1] += operand;
                 break;
             case opcode_for("dec"):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 stack[sp - 1] -= operand;
                 break;
 
             case opcode_for("neg"):
             case INVERSE(opcode_for("neg")):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 stack[sp - 1] = -stack[sp - 1];
                 break;
 
             case opcode_for("add"):
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 stack[sp - 1] += stack[sp - 2];
                 break;
             case opcode_for("sub"):
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 stack[sp - 1] -= stack[sp - 2];
                 break;
             case opcode_for("xor"):
             case INVERSE(opcode_for("xor")):
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 stack[sp - 1] ^= stack[sp - 2];
                 break;
             case opcode_for("shl"): {
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 uint32_t value = *reinterpret_cast<uint32_t *>(&stack[sp - 1]);
                 value = std::rotl(value, stack[sp - 2]);
                 stack[sp - 1] = *reinterpret_cast<int32_t *>(&value);
                 break;
             }
             case opcode_for("shr"): {
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 uint32_t value = *reinterpret_cast<uint32_t *>(&stack[sp - 1]);
                 value = std::rotr(value, stack[sp - 2]);
                 stack[sp - 1] = *reinterpret_cast<int32_t *>(&value);
@@ -351,25 +351,25 @@ namespace Machine {
                 break;
 
             case opcode_for("pushm"):
-                PUSHES_VALUES(1);
+                PUSHES_VALUES(1)
                 swap(stack[sp], memory.at(operand));
                 sp += 1;
                 break;
             case opcode_for("popm"):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 sp -= 1;
                 swap(stack[sp], memory.at(operand));
                 clear(stack[sp], 0);
                 break;
 
             case opcode_for("load"):
-                PUSHES_VALUES(1);
-                REQUIRES_PARAMS(1);
+                PUSHES_VALUES(1)
+                REQUIRES_PARAMS(1)
                 swap(stack[sp], memory.at(stack[sp - 1] + operand));
                 sp += 1;
                 break;
             case opcode_for("store"):
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 sp -= 1;
                 swap(stack[sp], memory.at(stack[sp - 1] + operand));
                 clear(stack[sp], 0);
@@ -377,13 +377,13 @@ namespace Machine {
 
             case opcode_for("memswap"):
             case INVERSE(opcode_for("memswap")):
-                REQUIRES_PARAMS(2);
+                REQUIRES_PARAMS(2)
                 swap(memory.at(stack[sp - 1] + operand), memory.at(stack[sp - 2] + operand));
                 break;
 
             case opcode_for("xorhc"):
             case INVERSE(opcode_for("xorhc")):
-                REQUIRES_PARAMS(1);
+                REQUIRES_PARAMS(1)
                 // Don't use operand here, since it is sign-extended and we want the raw bits.
                 stack[sp - 1] ^= (instruction & OPCODE_WIDTH_MASK) << (OPERAND_WIDTH - 1);
                 break;
