@@ -77,7 +77,7 @@ yyleng
 
 ".word"             { return symbol(DOT_WORD); }
 ".set"              { return symbol(DOT_SET); }
-".reserved_words"   { return symbol(DOT_RESERVED); }
+".bss"              { return symbol(DOT_RESERVED); }
 
 "start"               { return symbol_instruction(  0,  true ); }
 "stop"                { return symbol_instruction(  0, false ); }
