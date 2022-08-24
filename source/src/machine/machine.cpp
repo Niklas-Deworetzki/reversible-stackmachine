@@ -1,6 +1,7 @@
 
 #include <bit>
 #include <stdexcept>
+#include <cstdarg>
 #include "machine.h"
 #include "syntax/instructions.h"
 
@@ -46,10 +47,56 @@ static void clear(int32_t &value, int32_t expected) {
     }
 }
 
-#define REQUIRES_PARAMS(n) if (sp < (n)) throw std::underflow_error("Stack underflow. Not enough elements on the stack.")
-#define PUSHES_VALUES(n) if (stack.capacity() - sp <= static_cast<size_t>(n)) throw std::overflow_error("Stack overflow. Capacity exceeded.")
-#define REQUIRES_LOCAL(n) if (fp + (n) < 0 || fp + (n) >= sp) throw std::out_of_range("Access relative to frame pointer violates stack bounds.")
-#define ASSERT_POSITIVE(n) if ((n) < 0) throw std::invalid_argument("Negative operands are not supported for stack allocation instructions.")
+static char message_buffer[265];
+
+template<typename Error>
+static void report_error(const char *message_format, ...) {
+    va_list format_args;
+    va_start(format_args, message_format);
+
+    vsnprintf(message_buffer, sizeof(message_buffer), message_format, format_args);
+
+    va_end(format_args);
+    throw Error(message_buffer);
+}
+
+#define REQUIRES_PARAMS(n)                                                              \
+    if (sp < (n)) {                                                                     \
+        report_error<std::underflow_error>(                                             \
+            "Stack underflow. Required %ld elements on the stack but %ld are present.", \
+            n, sp);                                                                     \
+    }
+#define PUSHES_VALUES(n)                                                \
+    if (stack.capacity() - sp <= static_cast<size_t>(n)) {              \
+        report_error<std::overflow_error>(                              \
+            "Stack overflow. Capacity of %ld elements was exceeded.",   \
+                stack.capacity());                                      \
+    }
+#define REQUIRES_LOCAL(n)                                           \
+    if (fp + (n) < 0 || fp + (n) >= sp) {                           \
+        const auto offset = (n) <=> 0;                              \
+        std::string access;                                         \
+        std::string sign;                                           \
+        if (offset == 0) {                                          \
+            sign = "";                                              \
+            access = "";                                            \
+        } else if (offset < 0) {                                    \
+            sign = "-";                                             \
+            access = std::to_string(-(n));                          \
+        } else if (offset > 0) {                                    \
+            sign = "+";                                             \
+            access = std::to_string(n);                             \
+        }                                                           \
+        report_error<std::out_of_range>(                            \
+            "Access to fp%s%s (fp is %d) violates stack bounds.",   \
+            sign.c_str(), access.c_str(), fp);                      \
+    }
+#define ASSERT_POSITIVE(n)                                                                              \
+    if ((n) < 0) {                                                                                      \
+        report_error<std::invalid_argument>(                                                            \
+            "Negative operands are not supported for stack allocation instructions (operand is %d).",   \
+            n);                                                                                         \
+    }
 
 #endif
 
@@ -96,11 +143,17 @@ namespace Machine {
 
         switch (dir == Forward ? opcode : INVERSE(opcode)) {
             case opcode_for("start"):
-                if (this->running) throw std::logic_error("Executed 'start' instruction on machine already running. Please ensure that only one 'start' instruction is executed per program.");
+                if (this->running) {
+                    throw std::logic_error(
+                            "Executed 'start' instruction on machine already running. Please ensure that only one 'start' instruction is executed per program.");
+                }
                 else this->running = true;
                 break;
             case opcode_for("stop"):
-                if (!this->running) throw std::logic_error("Executed 'stop' instruction on machine that is not running. Please ensure that only one 'stop' instruction is executed per program.");
+                if (!this->running) {
+                    throw std::logic_error(
+                            "Executed 'stop' instruction on machine that is not running. Please ensure that only one 'stop' instruction is executed per program.");
+                }
                 else this->running = false;
                 break;
 
