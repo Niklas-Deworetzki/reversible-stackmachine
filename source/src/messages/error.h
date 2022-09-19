@@ -91,6 +91,13 @@ static std::string hex_format(int32_t instruction) {
     return stream.str();
 }
 
+class out_of_memory : public error_message {
+public:
+    explicit out_of_memory(int min_required, int max_required) : error_message(
+            "Insufficient memory allocated for program execution. Program expects at least " +
+                    std::to_string((size_t) max_required - min_required) + " bytes of memory.") {}
+};
+
 class illegal_instruction : public error_message {
 public:
     explicit illegal_instruction(int32_t instruction, int32_t opcode) : error_message(

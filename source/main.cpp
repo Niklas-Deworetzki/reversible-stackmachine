@@ -19,7 +19,7 @@
 #include "machine/machine.h"
 #include "syntax/syntax.h"
 
-#define VERSION_NUMBER "2.3"
+#define VERSION_NUMBER "2.3.1"
 static const char *version_string = "Stackmachine VM version " VERSION_NUMBER " (compiled " __DATE__ ")";
 
 static const char *help_page =

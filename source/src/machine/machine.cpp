@@ -467,8 +467,13 @@ namespace Machine {
             dir(Forward), pc(pc), br(0), sp(0), fp(0),
             memory(memory_size), stack(stack_size),
             running(false), counter(0), program(program) {
-        for (const auto &[address, value]: memory_layout) {
-            memory.at(address) = value;
+        if (!memory_layout.empty()) {
+            if (memory_layout.begin()->first < 0 || (size_t) memory_layout.end()->first >= memory_size) {
+                throw out_of_memory(memory_layout.begin()->first, memory_layout.end()->first);
+            }
+            for (const auto &[address, value]: memory_layout) {
+                memory.at(address) = value;
+            }
         }
     }
 }
